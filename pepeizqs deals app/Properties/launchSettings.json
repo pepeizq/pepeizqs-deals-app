@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "pepeizqs deals app (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "pepeizqs deals app (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
