@@ -80,7 +80,7 @@ namespace Modulos
             }
 			else if (wv.Source == new Uri(Web.dominio + "/Admin/Tiendas/Humble"))
 			{
-                if (pagina <= numPaginas)
+                if (pagina < numPaginas)
                 {
 					if (html != null)
 					{
