@@ -76,9 +76,9 @@ namespace Modulos
 
 				await Task.Delay(2000);
 
-				wv.Source = new Uri(Web.dominio + "/Admin/Tiendas/Humble");
+				wv.Source = new Uri(Web.dominio + "/Admin/Humble");
             }
-			else if (wv.Source == new Uri(Web.dominio + "/Admin/Tiendas/Humble"))
+			else if (wv.Source == new Uri(Web.dominio + "/Admin/Humble"))
 			{
                 if (pagina < numPaginas)
                 {
