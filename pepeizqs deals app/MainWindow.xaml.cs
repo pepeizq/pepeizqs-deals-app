@@ -48,6 +48,18 @@ namespace pepeizqs_deals_app
 			ObjetosVentana.botonHumbleArrancar = botonHumbleArrancar;
 			ObjetosVentana.tbHumblePaginas = tbHumblePaginas;
             ObjetosVentana.wvHumble = wvHumble;
+
+			//-----------------------------------------------------------------
+
+			ObjetosVentana.gridRSS = gridRSS;
+			ObjetosVentana.svRSS = svRSS;
+            ObjetosVentana.wvRSS = wvRSS;
+            ObjetosVentana.spRSSNoticias = spRSSNoticias;
+
+            //-----------------------------------------------------------------
+
+            ObjetosVentana.gridOpciones = gridOpciones;
+			ObjetosVentana.svOpciones = svOpciones;
 		}
 
 		public static class ObjetosVentana
@@ -73,19 +85,47 @@ namespace pepeizqs_deals_app
 			public static ScrollViewer svHumble { get; set; }
 			public static Button botonHumbleArrancar { get; set; }
 			public static TextBlock tbHumblePaginas { get; set; }
-
             public static WebView2 wvHumble { get; set; }
+
+			//-----------------------------------------------------------------
+
+			public static Grid gridRSS { get; set; }
+			public static ScrollViewer svRSS { get; set; }
+            public static WebView2 wvRSS { get; set; }
+            public static StackPanel spRSSNoticias { get; set; }
+
+            //-----------------------------------------------------------------
+
+            public static Grid gridOpciones { get; set; }
+			public static ScrollViewer svOpciones { get; set; }
 		}
 
 		private void nvPrincipal_Loaded(object sender, RoutedEventArgs e)
 		{
+			Pestañas.CreadorItems("RSS");
 			Pestañas.CreadorItems("Humble");
-			Pestañas.CreadorItems("Web");
-			
+			Pestañas.CreadorItems("Web");			
 		}
 
 		private void nvPrincipal_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
 		{
+			if (args.InvokedItemContainer != null)
+			{
+				if (args.InvokedItemContainer.GetType() == typeof(NavigationViewItem2))
+				{
+					NavigationViewItem2 item = args.InvokedItemContainer as NavigationViewItem2;
+
+					if (item.Name == "nvItemMenu")
+					{
+
+					}
+					else if (item.Name == "nvItemOpciones")
+					{
+						Pestañas.Visibilidad(gridOpciones, true, null, false);
+					}
+				}
+			}
+
 			if (args.InvokedItem != null)
 			{
 				if (args.InvokedItem.GetType() == typeof(StackPanel2))
@@ -105,6 +145,11 @@ namespace pepeizqs_deals_app
 							else if (tb.Text == "Humble")
 							{
 								Pestañas.Visibilidad(gridHumble, true, null, false);
+							}
+							else if (tb.Text == "RSS")
+							{
+                                RSS.Cargar();
+                                Pestañas.Visibilidad(gridRSS, true, null, false);
 							}
 						}
 					}

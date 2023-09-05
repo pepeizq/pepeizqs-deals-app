@@ -61,8 +61,10 @@ namespace Interfaz
             ObjetosVentana.nvPrincipal.Visibility = Visibility.Collapsed;
             ObjetosVentana.gridWeb.Visibility = Visibility.Collapsed;
             ObjetosVentana.gridHumble.Visibility = Visibility.Collapsed;
+			ObjetosVentana.gridRSS.Visibility = Visibility.Collapsed;
+			ObjetosVentana.gridOpciones.Visibility = Visibility.Collapsed;
 
-            grid.Visibility = Visibility.Visible;
+			grid.Visibility = Visibility.Visible;
 
             if (nv == true)
             {

@@ -7,7 +7,7 @@ namespace Modulos
 {
     public static class Web
     {
-        public static string dominio = "https://pepeizq-001-site1.ftempurl.com";
+        public static string dominio = "https://pepeizqdeals.com";
 
         public static void Cargar()
         {
