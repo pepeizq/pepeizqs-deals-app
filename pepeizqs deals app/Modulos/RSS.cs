@@ -1,5 +1,4 @@
-﻿using Discord;
-using FontAwesome6.Fonts;
+﻿using FontAwesome6.Fonts;
 using Interfaz;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -14,6 +13,8 @@ namespace Modulos
 {
 	public static class RSS
 	{
+		public static string dominio = "https://pepeizqdeals.com";
+
 		public static void Cargar()
 		{
             ObjetosVentana.wvRSS.NavigationCompleted += CompletarCarga;
@@ -86,8 +87,30 @@ namespace Modulos
                                     Orientation = Orientation.Horizontal
                                 };
 
-                                #region Discord
-                                FontAwesome icono = new FontAwesome
+								#region Todo
+								TextBlock tbTodo = new TextBlock
+								{
+									Text = "Todo",
+									Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
+								};
+
+								Button2 botonTodo = new Button2
+								{
+									Tag = noticia,
+									Content = tbTodo,
+									Margin = new Thickness(20, 0, 0, 0),
+									Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
+								};
+
+								botonTodo.Click += ClickTodo;
+								botonTodo.PointerEntered += Animaciones.EntraRatonBoton2;
+								botonTodo.PointerExited += Animaciones.SaleRatonBoton2;
+
+								sp.Children.Add(botonTodo);
+								#endregion
+
+								#region Discord
+								FontAwesome iconoDiscord = new FontAwesome
                                 {
                                     Icon = FontAwesome6.EFontAwesomeIcon.Brands_Discord,
                                     Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
@@ -96,7 +119,7 @@ namespace Modulos
                                 Button2 botonDiscord = new Button2
                                 {
                                     Tag = noticia,
-                                    Content = icono,
+                                    Content = iconoDiscord,
                                     Margin = new Thickness(20, 0, 0, 0),
                                     Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
                                 };
@@ -106,9 +129,31 @@ namespace Modulos
                                 botonDiscord.PointerExited += Animaciones.SaleRatonBoton2;
 
                                 sp.Children.Add(botonDiscord);
-                                #endregion
+								#endregion
 
-                                sp.SetValue(Grid.ColumnProperty, 1);
+								#region Telegram
+								FontAwesome iconoTelegram = new FontAwesome
+								{
+									Icon = FontAwesome6.EFontAwesomeIcon.Brands_Telegram,
+									Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
+								};
+
+								Button2 botonTelegram = new Button2
+								{
+									Tag = noticia,
+									Content = iconoTelegram,
+									Margin = new Thickness(20, 0, 0, 0),
+									Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
+								};
+
+								botonTelegram.Click += ClickTelegram;
+								botonTelegram.PointerEntered += Animaciones.EntraRatonBoton2;
+								botonTelegram.PointerExited += Animaciones.SaleRatonBoton2;
+
+								sp.Children.Add(botonTelegram);
+								#endregion
+
+								sp.SetValue(Grid.ColumnProperty, 1);
                                 grid.Children.Add(sp);
 
                                 ObjetosVentana.spRSSNoticias.Children.Add(grid);
@@ -119,7 +164,40 @@ namespace Modulos
             }
         }
 
-        public static void ClickDiscord(object sender, RoutedEventArgs e)
+        public static string BuscarEnlace(Noticia noticia)
+        {
+            string enlace = string.Empty;
+
+            if (noticia.Enlace != null)
+            {
+                if (noticia.Enlace.Contains(dominio) == false)
+                {
+                    enlace = dominio + noticia.Enlace;
+                }
+                else
+                {
+                    enlace = noticia.Enlace;
+                }
+            }
+            else
+            {
+                enlace = dominio + "/news/" + noticia.Id.ToString();
+            }
+
+            return enlace;
+        }
+
+		public static void ClickTodo(object sender, RoutedEventArgs e)
+		{
+			Button boton = (Button)sender;
+			Noticia noticia = (Noticia)boton.Tag;
+
+			RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Ingles);
+			RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Español);
+            RedesSociales.Telegram.Enviar(noticia);
+		}
+
+		public static void ClickDiscord(object sender, RoutedEventArgs e)
         {
             Button boton = (Button)sender;
             Noticia noticia = (Noticia)boton.Tag;
@@ -127,7 +205,15 @@ namespace Modulos
             RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Ingles);
             RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Español);
         }
-    }
+
+		public static void ClickTelegram(object sender, RoutedEventArgs e)
+		{
+			Button boton = (Button)sender;
+			Noticia noticia = (Noticia)boton.Tag;
+
+			RedesSociales.Telegram.Enviar(noticia);
+		}
+	}
 
     public class Noticia
     {

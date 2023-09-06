@@ -14,8 +14,6 @@ namespace RedesSociales
 
     public static class Discord
     {
-        public static string dominio = "https://pepeizqdeals.com";
-
         public static async void Enviar(Noticia noticia, Idiomas idioma)
         {
             string hook = null;
@@ -44,23 +42,7 @@ namespace RedesSociales
                         constructor.Title = noticia.TituloEs;
                     }
 
-                    string enlace = string.Empty;
-
-                    if (noticia.Enlace != null)
-                    {
-                        if (noticia.Enlace.Contains(dominio) == false)
-                        {
-                            enlace = dominio + noticia.Enlace;
-                        }
-                        else
-                        {
-                            enlace = noticia.Enlace;
-                        }
-                    }
-                    else
-                    {
-                        enlace = dominio + "/news/" + noticia.Id.ToString();
-                    }
+                    string enlace = RSS.BuscarEnlace(noticia);
 
                     constructor.Url = enlace;
 
