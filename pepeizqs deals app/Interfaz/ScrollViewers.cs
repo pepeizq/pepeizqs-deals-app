@@ -18,6 +18,7 @@ namespace Interfaz
             ObjetosVentana.svHumble.ViewChanging += svScroll;
 			ObjetosVentana.svRSS.ViewChanging += svScroll;
 			ObjetosVentana.svOpciones.ViewChanging += svScroll;
+			ObjetosVentana.svTwitter.ViewChanging += svScroll;
 		}
 
         private static void svScroll(object sender, ScrollViewerViewChangingEventArgs args)
@@ -50,14 +51,18 @@ namespace Interfaz
             {
                 ObjetosVentana.svHumble.ChangeView(null, 0, null);
             }
-			else if (ObjetosVentana.gridRSS.Visibility == Visibility.Visible)
+            else if (ObjetosVentana.gridRSS.Visibility == Visibility.Visible)
+            {
+                ObjetosVentana.svRSS.ChangeView(null, 0, null);
+            }
+			else if (ObjetosVentana.gridTwitter.Visibility == Visibility.Visible)
 			{
-				ObjetosVentana.svRSS.ChangeView(null, 0, null);
+				ObjetosVentana.svTwitter.ChangeView(null, 0, null);
 			}
 			else if (ObjetosVentana.gridOpciones.Visibility == Visibility.Visible)
-			{
-				ObjetosVentana.svOpciones.ChangeView(null, 0, null);
-			}
+            {
+                ObjetosVentana.svOpciones.ChangeView(null, 0, null);
+            }
 		}
 
         public static void EnseñarSubir(ScrollViewer sv)

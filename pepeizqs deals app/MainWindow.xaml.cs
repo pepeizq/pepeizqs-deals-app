@@ -2,6 +2,7 @@ using Interfaz;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Modulos;
+using RedesSociales;
 
 namespace pepeizqs_deals_app
 {
@@ -20,6 +21,7 @@ namespace pepeizqs_deals_app
 
 			Web.Cargar();
 			Humble.Cargar();
+			Twitter.Cargar();
 
 			Pestañas.Visibilidad(gridWeb, true, null, false);
 		}
@@ -56,9 +58,16 @@ namespace pepeizqs_deals_app
             ObjetosVentana.wvRSS = wvRSS;
             ObjetosVentana.spRSSNoticias = spRSSNoticias;
 
-            //-----------------------------------------------------------------
+			//-----------------------------------------------------------------
 
-            ObjetosVentana.gridOpciones = gridOpciones;
+			ObjetosVentana.gridTwitter = gridTwitter;
+			ObjetosVentana.svTwitter = svTwitter;
+			ObjetosVentana.tbTwitterCodigo = tbTwitterCodigo;
+			ObjetosVentana.wvTwitter = wvTwitter;
+
+			//-----------------------------------------------------------------
+
+			ObjetosVentana.gridOpciones = gridOpciones;
 			ObjetosVentana.svOpciones = svOpciones;
 		}
 
@@ -94,14 +103,22 @@ namespace pepeizqs_deals_app
             public static WebView2 wvRSS { get; set; }
             public static StackPanel spRSSNoticias { get; set; }
 
-            //-----------------------------------------------------------------
+			//-----------------------------------------------------------------
 
-            public static Grid gridOpciones { get; set; }
+			public static Grid gridTwitter { get; set; }
+			public static ScrollViewer svTwitter { get; set; }
+			public static TextBox tbTwitterCodigo { get; set; }
+			public static WebView2 wvTwitter { get; set; }
+
+			//-----------------------------------------------------------------
+
+			public static Grid gridOpciones { get; set; }
 			public static ScrollViewer svOpciones { get; set; }
 		}
 
 		private void nvPrincipal_Loaded(object sender, RoutedEventArgs e)
 		{
+			Pestañas.CreadorItems("Twitter");
 			Pestañas.CreadorItems("RSS");
 			Pestañas.CreadorItems("Humble");
 			Pestañas.CreadorItems("Web");			
@@ -151,11 +168,14 @@ namespace pepeizqs_deals_app
                                 RSS.Cargar();
                                 Pestañas.Visibilidad(gridRSS, true, null, false);
 							}
+							else if (tb.Text == "Twitter")
+							{ 
+								Pestañas.Visibilidad(gridTwitter, true, null, false);
+							}
 						}
 					}
 				}
 			}
-		}
-		
+		}	
 	}
 }

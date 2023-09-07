@@ -153,6 +153,50 @@ namespace Modulos
 								sp.Children.Add(botonTelegram);
 								#endregion
 
+								#region Reddit
+								FontAwesome iconoReddit = new FontAwesome
+								{
+									Icon = FontAwesome6.EFontAwesomeIcon.Brands_Reddit,
+									Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
+								};
+
+								Button2 botonReddit = new Button2
+								{
+									Tag = noticia,
+									Content = iconoReddit,
+									Margin = new Thickness(20, 0, 0, 0),
+									Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
+								};
+
+								botonReddit.Click += ClickReddit;
+								botonReddit.PointerEntered += Animaciones.EntraRatonBoton2;
+								botonReddit.PointerExited += Animaciones.SaleRatonBoton2;
+
+								sp.Children.Add(botonReddit);
+								#endregion
+
+								#region Twitter
+								FontAwesome iconoTwitter = new FontAwesome
+								{
+									Icon = FontAwesome6.EFontAwesomeIcon.Brands_Twitter,
+									Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
+								};
+
+								Button2 botonTwitter = new Button2
+								{
+									Tag = noticia,
+									Content = iconoTwitter,
+									Margin = new Thickness(20, 0, 0, 0),
+									Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
+								};
+
+								botonTwitter.Click += ClickTwitter;
+								botonTwitter.PointerEntered += Animaciones.EntraRatonBoton2;
+								botonTwitter.PointerExited += Animaciones.SaleRatonBoton2;
+
+								sp.Children.Add(botonTwitter);
+								#endregion
+
 								sp.SetValue(Grid.ColumnProperty, 1);
                                 grid.Children.Add(sp);
 
@@ -195,6 +239,8 @@ namespace Modulos
 			RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Ingles);
 			RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Español);
             RedesSociales.Telegram.Enviar(noticia);
+			RedesSociales.Reddit.Enviar(noticia);
+			RedesSociales.Twitter.Enviar(noticia);
 		}
 
 		public static void ClickDiscord(object sender, RoutedEventArgs e)
@@ -212,6 +258,22 @@ namespace Modulos
 			Noticia noticia = (Noticia)boton.Tag;
 
 			RedesSociales.Telegram.Enviar(noticia);
+		}
+
+		public static void ClickReddit(object sender, RoutedEventArgs e)
+		{
+			Button boton = (Button)sender;
+			Noticia noticia = (Noticia)boton.Tag;
+
+			RedesSociales.Reddit.Enviar(noticia);
+		}
+
+		public static void ClickTwitter(object sender, RoutedEventArgs e)
+		{
+			Button boton = (Button)sender;
+			Noticia noticia = (Noticia)boton.Tag;
+
+			RedesSociales.Twitter.Enviar(noticia);
 		}
 	}
 
