@@ -7,6 +7,7 @@ using Microsoft.Web.WebView2.Core;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using static pepeizqs_deals_app.MainWindow;
 
 namespace Modulos
@@ -32,178 +33,203 @@ namespace Modulos
 
                 if (html != null)
                 {
-                    html = JsonConvert.DeserializeObject(html).ToString();
+					if (WebUtility.HtmlDecode(html).Contains("<body>The service is unavailable.</body>") == false)
+					{
+						html = JsonConvert.DeserializeObject(html).ToString();
 
-                    int int1 = html.IndexOf("[{");
-                    html = html.Remove(0, int1);
+						int int1 = html.IndexOf("[{");
+						html = html.Remove(0, int1);
 
-                    int int2 = html.IndexOf("}]");
-                    html = html.Remove(int2 + 2, html.Length - int2 - 2);
+						int int2 = html.IndexOf("}]");
+						html = html.Remove(int2 + 2, html.Length - int2 - 2);
 
-                    List<Noticia> noticias = JsonConvert.DeserializeObject<List<Noticia>>(html);
+						List<Noticia> noticias = JsonConvert.DeserializeObject<List<Noticia>>(html);
 
-                    if (noticias != null)
-                    {
-                        if (noticias.Count > 0)
-                        {
-                            noticias.Reverse();
+						if (noticias != null)
+						{
+							if (noticias.Count > 0)
+							{
+								noticias.Reverse();
 
-                            wv.Visibility = Visibility.Collapsed;
-                            ObjetosVentana.spRSSNoticias.Visibility = Visibility.Visible;
-                            ObjetosVentana.spRSSNoticias.Children.Clear();
+								wv.Visibility = Visibility.Collapsed;
+								ObjetosVentana.spRSSNoticias.Visibility = Visibility.Visible;
+								ObjetosVentana.spRSSNoticias.Children.Clear();
 
-                            foreach (var noticia in noticias) 
-                            {
-                                Grid grid = new Grid
-                                {
-                                    Padding = new Thickness(20),
-                                    BorderThickness = new Thickness(0, 0, 0, 1)
-                                };
-
-                                ColumnDefinition col1 = new ColumnDefinition
-                                {
-                                    Width = new GridLength(1, GridUnitType.Star)
-                                };
-
-                                grid.ColumnDefinitions.Add(col1);
-
-                                ColumnDefinition col2 = new ColumnDefinition
-                                {
-                                    Width = new GridLength(1, GridUnitType.Auto)
-                                };
-
-                                grid.ColumnDefinitions.Add(col2);
-
-                                TextBlock tb = new TextBlock();
-                                tb.Text = noticia.TituloEn;
-
-                                tb.SetValue(Grid.ColumnProperty, 0);
-                                grid.Children.Add(tb);
-
-                                //--------------------------------------------
-
-                                StackPanel sp = new StackPanel
-                                {
-                                    Orientation = Orientation.Horizontal
-                                };
-
-								#region Todo
-								TextBlock tbTodo = new TextBlock
+								foreach (var noticia in noticias)
 								{
-									Text = "Todo",
-									Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
-								};
+									Grid grid = new Grid
+									{
+										Padding = new Thickness(20),
+										BorderThickness = new Thickness(0, 0, 0, 1)
+									};
 
-								Button2 botonTodo = new Button2
-								{
-									Tag = noticia,
-									Content = tbTodo,
-									Margin = new Thickness(20, 0, 0, 0),
-									Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
-								};
+									ColumnDefinition col1 = new ColumnDefinition
+									{
+										Width = new GridLength(1, GridUnitType.Star)
+									};
 
-								botonTodo.Click += ClickTodo;
-								botonTodo.PointerEntered += Animaciones.EntraRatonBoton2;
-								botonTodo.PointerExited += Animaciones.SaleRatonBoton2;
+									grid.ColumnDefinitions.Add(col1);
 
-								sp.Children.Add(botonTodo);
-								#endregion
+									ColumnDefinition col2 = new ColumnDefinition
+									{
+										Width = new GridLength(1, GridUnitType.Auto)
+									};
 
-								#region Discord
-								FontAwesome iconoDiscord = new FontAwesome
-                                {
-                                    Icon = FontAwesome6.EFontAwesomeIcon.Brands_Discord,
-                                    Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
-                                };
+									grid.ColumnDefinitions.Add(col2);
 
-                                Button2 botonDiscord = new Button2
-                                {
-                                    Tag = noticia,
-                                    Content = iconoDiscord,
-                                    Margin = new Thickness(20, 0, 0, 0),
-                                    Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
-                                };
+									TextBlock tb = new TextBlock();
+									tb.Text = noticia.TituloEn;
 
-                                botonDiscord.Click += ClickDiscord;
-                                botonDiscord.PointerEntered += Animaciones.EntraRatonBoton2;
-                                botonDiscord.PointerExited += Animaciones.SaleRatonBoton2;
+									tb.SetValue(Grid.ColumnProperty, 0);
+									grid.Children.Add(tb);
 
-                                sp.Children.Add(botonDiscord);
-								#endregion
+									//--------------------------------------------
 
-								#region Telegram
-								FontAwesome iconoTelegram = new FontAwesome
-								{
-									Icon = FontAwesome6.EFontAwesomeIcon.Brands_Telegram,
-									Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
-								};
+									StackPanel sp = new StackPanel
+									{
+										Orientation = Orientation.Horizontal
+									};
 
-								Button2 botonTelegram = new Button2
-								{
-									Tag = noticia,
-									Content = iconoTelegram,
-									Margin = new Thickness(20, 0, 0, 0),
-									Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
-								};
+									#region Todo
+									TextBlock tbTodo = new TextBlock
+									{
+										Text = "Todo",
+										Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
+									};
 
-								botonTelegram.Click += ClickTelegram;
-								botonTelegram.PointerEntered += Animaciones.EntraRatonBoton2;
-								botonTelegram.PointerExited += Animaciones.SaleRatonBoton2;
+									Button2 botonTodo = new Button2
+									{
+										Tag = noticia,
+										Content = tbTodo,
+										Margin = new Thickness(20, 0, 0, 0),
+										Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
+									};
 
-								sp.Children.Add(botonTelegram);
-								#endregion
+									botonTodo.Click += ClickTodo;
+									botonTodo.PointerEntered += Animaciones.EntraRatonBoton2;
+									botonTodo.PointerExited += Animaciones.SaleRatonBoton2;
 
-								#region Reddit
-								FontAwesome iconoReddit = new FontAwesome
-								{
-									Icon = FontAwesome6.EFontAwesomeIcon.Brands_Reddit,
-									Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
-								};
+									sp.Children.Add(botonTodo);
+									#endregion
 
-								Button2 botonReddit = new Button2
-								{
-									Tag = noticia,
-									Content = iconoReddit,
-									Margin = new Thickness(20, 0, 0, 0),
-									Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
-								};
+									#region Discord
+									FontAwesome iconoDiscord = new FontAwesome
+									{
+										Icon = FontAwesome6.EFontAwesomeIcon.Brands_Discord,
+										Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
+									};
 
-								botonReddit.Click += ClickReddit;
-								botonReddit.PointerEntered += Animaciones.EntraRatonBoton2;
-								botonReddit.PointerExited += Animaciones.SaleRatonBoton2;
+									Button2 botonDiscord = new Button2
+									{
+										Tag = noticia,
+										Content = iconoDiscord,
+										Margin = new Thickness(20, 0, 0, 0),
+										Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
+									};
 
-								sp.Children.Add(botonReddit);
-								#endregion
+									botonDiscord.Click += ClickDiscord;
+									botonDiscord.PointerEntered += Animaciones.EntraRatonBoton2;
+									botonDiscord.PointerExited += Animaciones.SaleRatonBoton2;
 
-								#region Twitter
-								FontAwesome iconoTwitter = new FontAwesome
-								{
-									Icon = FontAwesome6.EFontAwesomeIcon.Brands_Twitter,
-									Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
-								};
+									sp.Children.Add(botonDiscord);
+									#endregion
 
-								Button2 botonTwitter = new Button2
-								{
-									Tag = noticia,
-									Content = iconoTwitter,
-									Margin = new Thickness(20, 0, 0, 0),
-									Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
-								};
+									#region Telegram
+									FontAwesome iconoTelegram = new FontAwesome
+									{
+										Icon = FontAwesome6.EFontAwesomeIcon.Brands_Telegram,
+										Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
+									};
 
-								botonTwitter.Click += ClickTwitter;
-								botonTwitter.PointerEntered += Animaciones.EntraRatonBoton2;
-								botonTwitter.PointerExited += Animaciones.SaleRatonBoton2;
+									Button2 botonTelegram = new Button2
+									{
+										Tag = noticia,
+										Content = iconoTelegram,
+										Margin = new Thickness(20, 0, 0, 0),
+										Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
+									};
 
-								sp.Children.Add(botonTwitter);
-								#endregion
+									botonTelegram.Click += ClickTelegram;
+									botonTelegram.PointerEntered += Animaciones.EntraRatonBoton2;
+									botonTelegram.PointerExited += Animaciones.SaleRatonBoton2;
 
-								sp.SetValue(Grid.ColumnProperty, 1);
-                                grid.Children.Add(sp);
+									sp.Children.Add(botonTelegram);
+									#endregion
 
-                                ObjetosVentana.spRSSNoticias.Children.Add(grid);
-                            }
-                        }
-                    }
+									#region Reddit
+									FontAwesome iconoReddit = new FontAwesome
+									{
+										Icon = FontAwesome6.EFontAwesomeIcon.Brands_Reddit,
+										Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
+									};
+
+									Button2 botonReddit = new Button2
+									{
+										Tag = noticia,
+										Content = iconoReddit,
+										Margin = new Thickness(20, 0, 0, 0),
+										Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
+									};
+
+									botonReddit.Click += ClickReddit;
+									botonReddit.PointerEntered += Animaciones.EntraRatonBoton2;
+									botonReddit.PointerExited += Animaciones.SaleRatonBoton2;
+
+									sp.Children.Add(botonReddit);
+									#endregion
+
+									#region Twitter
+									FontAwesome iconoTwitter = new FontAwesome
+									{
+										Icon = FontAwesome6.EFontAwesomeIcon.Brands_Twitter,
+										Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
+									};
+
+									Button2 botonTwitter = new Button2
+									{
+										Tag = noticia,
+										Content = iconoTwitter,
+										Margin = new Thickness(20, 0, 0, 0),
+										Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
+									};
+
+									botonTwitter.Click += ClickTwitter;
+									botonTwitter.PointerEntered += Animaciones.EntraRatonBoton2;
+									botonTwitter.PointerExited += Animaciones.SaleRatonBoton2;
+
+									sp.Children.Add(botonTwitter);
+									#endregion
+
+									#region Steam
+									FontAwesome iconoSteam = new FontAwesome
+									{
+										Icon = FontAwesome6.EFontAwesomeIcon.Brands_Steam,
+										Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
+									};
+
+									Button2 botonSteam = new Button2
+									{
+										Tag = noticia,
+										Content = iconoSteam,
+										Margin = new Thickness(20, 0, 0, 0),
+										Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
+									};
+
+									botonSteam.Click += ClickSteam;
+									botonSteam.PointerEntered += Animaciones.EntraRatonBoton2;
+									botonSteam.PointerExited += Animaciones.SaleRatonBoton2;
+
+									sp.Children.Add(botonSteam);
+									#endregion
+
+									sp.SetValue(Grid.ColumnProperty, 1);
+									grid.Children.Add(sp);
+
+									ObjetosVentana.spRSSNoticias.Children.Add(grid);
+								}
+							}
+						}
+					}                  
                 }
             }
         }
@@ -241,6 +267,8 @@ namespace Modulos
             RedesSociales.Telegram.Enviar(noticia);
 			RedesSociales.Reddit.Enviar(noticia);
 			RedesSociales.Twitter.Enviar(noticia);
+			RedesSociales.Steam.Enviar(noticia);
+			Pestañas.Visibilidad(ObjetosVentana.gridSteam, true, null, false);
 		}
 
 		public static void ClickDiscord(object sender, RoutedEventArgs e)
@@ -274,6 +302,15 @@ namespace Modulos
 			Noticia noticia = (Noticia)boton.Tag;
 
 			RedesSociales.Twitter.Enviar(noticia);
+		}
+
+		public static void ClickSteam(object sender, RoutedEventArgs e)
+		{
+			Button boton = (Button)sender;
+			Noticia noticia = (Noticia)boton.Tag;
+
+			RedesSociales.Steam.Enviar(noticia);
+			Pestañas.Visibilidad(ObjetosVentana.gridSteam, true, null, false);
 		}
 	}
 

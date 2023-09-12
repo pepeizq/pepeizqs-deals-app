@@ -22,6 +22,7 @@ namespace pepeizqs_deals_app
 			Web.Cargar();
 			Humble.Cargar();
 			Twitter.Cargar();
+			Steam.Cargar();
 
 			Pestañas.Visibilidad(gridWeb, true, null, false);
 		}
@@ -64,6 +65,13 @@ namespace pepeizqs_deals_app
 			ObjetosVentana.svTwitter = svTwitter;
 			ObjetosVentana.tbTwitterCodigo = tbTwitterCodigo;
 			ObjetosVentana.wvTwitter = wvTwitter;
+
+			//-----------------------------------------------------------------
+
+			ObjetosVentana.gridSteam = gridSteam;
+			ObjetosVentana.svSteam = svSteam;
+			ObjetosVentana.tbSteamEnlace = tbSteamEnlace;
+			ObjetosVentana.wvSteam = wvSteam;
 
 			//-----------------------------------------------------------------
 
@@ -112,12 +120,20 @@ namespace pepeizqs_deals_app
 
 			//-----------------------------------------------------------------
 
+			public static Grid gridSteam { get; set; }
+			public static ScrollViewer svSteam { get; set; }
+			public static TextBox tbSteamEnlace { get; set; }
+			public static WebView2 wvSteam { get; set; }
+
+			//-----------------------------------------------------------------
+
 			public static Grid gridOpciones { get; set; }
 			public static ScrollViewer svOpciones { get; set; }
 		}
 
 		private void nvPrincipal_Loaded(object sender, RoutedEventArgs e)
 		{
+			Pestañas.CreadorItems("Steam");
 			Pestañas.CreadorItems("Twitter");
 			Pestañas.CreadorItems("RSS");
 			Pestañas.CreadorItems("Humble");
@@ -171,6 +187,10 @@ namespace pepeizqs_deals_app
 							else if (tb.Text == "Twitter")
 							{ 
 								Pestañas.Visibilidad(gridTwitter, true, null, false);
+							}
+							else if (tb.Text == "Steam")
+							{
+								Pestañas.Visibilidad(gridSteam, true, null, false);
 							}
 						}
 					}

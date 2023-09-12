@@ -1,0 +1,140 @@
+﻿using Microsoft.UI.Xaml.Controls;
+using Microsoft.VisualBasic;
+using Microsoft.Web.WebView2.Core;
+using Modulos;
+using System;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web;
+using static pepeizqs_deals_app.MainWindow;
+
+namespace RedesSociales
+{
+    public static class Steam
+    {
+        public static void Cargar()
+        {
+            ObjetosVentana.wvSteam.Source = new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create");
+
+			ObjetosVentana.wvSteam.NavigationCompleted += CompletarCarga;
+		}
+
+		private static async void CompletarCarga(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        {
+            WebView2 wv = (WebView2)sender;
+
+            ObjetosVentana.tbSteamEnlace.Text = wv.Source.AbsoluteUri;
+
+            if (wv.CoreWebView2.DocumentTitle == "Steam Community :: Error")
+            {
+                wv.Source = new Uri("https://steamcommunity.com/login/home/?goto=groups%2Fpepeizqdeals%2Fannouncements%2Fcreate");
+            }
+            else
+            {
+				if (wv.Source.AbsoluteUri.Contains("https://steamcommunity.com/login/home/?goto=groups%2Fpepeizqdeals%2Fannouncements%2Fcreate") == true)
+				{
+					await Task.Delay(5000);
+					await wv.ExecuteScriptAsync("document.getElementsByClassName('newlogindialog_TextInput_2eKVn')[0].value = 'pepeizqalt02'");
+
+					await Task.Delay(2000);
+					await wv.ExecuteScriptAsync("document.getElementsByClassName('newlogindialog_TextInput_2eKVn')[1].value = 'pepelu605'");
+
+					await Task.Delay(2000);
+					//await wv.ExecuteScriptAsync("document.getElementsByClassName('newlogindialog_LoginForm_3Tsg9')[0].submit();");
+				}
+				else
+				{
+					if (wv.Source != new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create"))
+					{
+						wv.Source = new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create");
+					}					
+				}
+			}           
+        }
+
+		public static async void Enviar(Noticia noticia)
+		{
+			WebView2 wv = ObjetosVentana.wvSteam;
+
+			if (wv.Source.AbsoluteUri == "https://steamcommunity.com/groups/pepeizqdeals/announcements/create")
+			{
+				await Task.Delay(1000);
+				await wv.ExecuteScriptAsync("document.getElementById('headline').focus();");
+
+				string titulo = WebUtility.HtmlDecode(noticia.TituloEn);
+
+				await wv.ExecuteScriptAsync("document.getElementById('headline').value = '" + HttpUtility.JavaScriptStringEncode(titulo) + "'");
+
+				await Task.Delay(1000);
+				await wv.ExecuteScriptAsync("document.getElementById('body').focus();");
+
+				string contenido = WebUtility.HtmlDecode(noticia.ContenidoEn);
+
+				int i = 0;
+				while (i < 1000)
+				{
+					if (contenido.Contains("<div") == true)
+					{
+						int int1 = contenido.IndexOf("<div");
+						string temp1 = contenido.Remove(0, int1);
+
+						int int2 = temp1.IndexOf(">");
+						contenido = contenido.Remove(int1, int2 + 1);
+					}
+					else
+					{
+						break;
+					}
+
+					i += 1;
+				}
+
+				i = 0;
+				while (i < 1000)
+				{
+					if (contenido.Contains("<a") == true)
+					{
+						int int1 = contenido.IndexOf("<a");
+						string temp1 = contenido.Remove(0, int1);
+
+						int int2 = temp1.IndexOf(Strings.ChrW(34));
+						contenido = contenido.Remove(int1, int2 + 1);
+
+						contenido = contenido.Insert(int1, "[url=https://pepeizqdeals.com");
+
+						int int3 = contenido.IndexOf(Strings.ChrW(34));
+						string temp3 = contenido.Remove(0, int3);
+
+						int int4 = temp3.IndexOf(">");
+						contenido = contenido.Remove(int3, int4 + 1);
+
+						contenido = contenido.Insert(int3, "]");
+					}
+					else
+					{
+						break;
+					}
+
+					i += 1;
+				}
+
+				contenido = contenido.Replace("</div>", Environment.NewLine + Environment.NewLine);
+				contenido = contenido.Replace("<ul>", "[list]");
+				contenido = contenido.Replace("</ul>", "[/list]");
+				contenido = contenido.Replace("<li>", "[*]");
+				contenido = contenido.Replace("</li>", null);
+				contenido = contenido.Replace("</a>", "[/url]");
+
+				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(contenido) + "'");
+
+				await wv.ExecuteScriptAsync("document.getElementsByClassName('btn_green_white_innerfade btn_medium')[0].click();");
+
+				wv.Source = new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create");
+			}
+			else
+			{
+				wv.Source = new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create");
+			}
+		}
+	}
+}

@@ -17,8 +17,9 @@ namespace Interfaz
             ObjetosVentana.svWeb.ViewChanging += svScroll;
             ObjetosVentana.svHumble.ViewChanging += svScroll;
 			ObjetosVentana.svRSS.ViewChanging += svScroll;
-			ObjetosVentana.svOpciones.ViewChanging += svScroll;
 			ObjetosVentana.svTwitter.ViewChanging += svScroll;
+			ObjetosVentana.svSteam.ViewChanging += svScroll;
+			ObjetosVentana.svOpciones.ViewChanging += svScroll;
 		}
 
         private static void svScroll(object sender, ScrollViewerViewChangingEventArgs args)
@@ -58,6 +59,10 @@ namespace Interfaz
 			else if (ObjetosVentana.gridTwitter.Visibility == Visibility.Visible)
 			{
 				ObjetosVentana.svTwitter.ChangeView(null, 0, null);
+			}
+			else if (ObjetosVentana.gridSteam.Visibility == Visibility.Visible)
+			{
+				ObjetosVentana.svSteam.ChangeView(null, 0, null);
 			}
 			else if (ObjetosVentana.gridOpciones.Visibility == Visibility.Visible)
             {
