@@ -10,15 +10,12 @@ using System.Threading.Tasks;
 using Tweetinvi;
 using Tweetinvi.Core.Web;
 using Tweetinvi.Models;
-using Tweetinvi.Parameters;
 using static pepeizqs_deals_app.MainWindow;
 
 namespace RedesSociales
 {
 	public static class Twitter
 	{
-		private static string secret = "Rh9JLKcUt2T6fKIVGYDsFwyIIh_sizmOL_ROIWFyL6ntgwTzkU";
-
 		public async static void Cargar()
 		{
 			TwitterClient cliente = new TwitterClient("4c67yvUZOS4mAfZAM0ixsNDUA", "XmMEJukGa3vKwPJIMZknd7GLgKok54sucYuYelRXIT5yRKunuW",

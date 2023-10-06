@@ -60,74 +60,34 @@ namespace RedesSociales
 			{
 				await Task.Delay(1000);
 				await wv.ExecuteScriptAsync("document.getElementById('headline').focus();");
-
-				string titulo = WebUtility.HtmlDecode(noticia.TituloEn);
-
-				await wv.ExecuteScriptAsync("document.getElementById('headline').value = '" + HttpUtility.JavaScriptStringEncode(titulo) + "'");
+				await wv.ExecuteScriptAsync("document.getElementById('headline').value = '" + HttpUtility.JavaScriptStringEncode(WebUtility.HtmlDecode(noticia.TituloEn)) + "'");
 
 				await Task.Delay(1000);
 				await wv.ExecuteScriptAsync("document.getElementById('body').focus();");
 
-				string contenido = WebUtility.HtmlDecode(noticia.ContenidoEn);
+				await Task.Delay(1000);
+				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido(noticia.ContenidoEn, noticia.Imagen)) + "'");
 
-				int i = 0;
-				while (i < 1000)
-				{
-					if (contenido.Contains("<div") == true)
-					{
-						int int1 = contenido.IndexOf("<div");
-						string temp1 = contenido.Remove(0, int1);
+				await Task.Delay(1000);
 
-						int int2 = temp1.IndexOf(">");
-						contenido = contenido.Remove(int1, int2 + 1);
-					}
-					else
-					{
-						break;
-					}
+				await wv.ExecuteScriptAsync("document.getElementById('language').focus();");
+				await wv.ExecuteScriptAsync("document.getElementById('language').selectedIndex = '5';");
+				await wv.ExecuteScriptAsync("document.getElementById('language').onchange();");
 
-					i += 1;
-				}
+				await Task.Delay(1000);
 
-				i = 0;
-				while (i < 1000)
-				{
-					if (contenido.Contains("<a") == true)
-					{
-						int int1 = contenido.IndexOf("<a");
-						string temp1 = contenido.Remove(0, int1);
+				await wv.ExecuteScriptAsync("document.getElementById('headline').focus();");
+				await wv.ExecuteScriptAsync("document.getElementById('headline').value = '" + HttpUtility.JavaScriptStringEncode(WebUtility.HtmlDecode(noticia.TituloEs)) + "'");
 
-						int int2 = temp1.IndexOf(Strings.ChrW(34));
-						contenido = contenido.Remove(int1, int2 + 1);
+				await Task.Delay(1000);
 
-						contenido = contenido.Insert(int1, "[url=https://pepeizqdeals.com");
+				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido(noticia.ContenidoEs, noticia.Imagen)) + "'");
 
-						int int3 = contenido.IndexOf(Strings.ChrW(34));
-						string temp3 = contenido.Remove(0, int3);
-
-						int int4 = temp3.IndexOf(">");
-						contenido = contenido.Remove(int3, int4 + 1);
-
-						contenido = contenido.Insert(int3, "]");
-					}
-					else
-					{
-						break;
-					}
-
-					i += 1;
-				}
-
-				contenido = contenido.Replace("</div>", Environment.NewLine + Environment.NewLine);
-				contenido = contenido.Replace("<ul>", "[list]");
-				contenido = contenido.Replace("</ul>", "[/list]");
-				contenido = contenido.Replace("<li>", "[*]");
-				contenido = contenido.Replace("</li>", null);
-				contenido = contenido.Replace("</a>", "[/url]");
-
-				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(contenido) + "'");
+				await Task.Delay(1000);
 
 				await wv.ExecuteScriptAsync("document.getElementsByClassName('btn_green_white_innerfade btn_medium')[0].click();");
+
+				await Task.Delay(1000);
 
 				wv.Source = new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create");
 			}
@@ -135,6 +95,73 @@ namespace RedesSociales
 			{
 				wv.Source = new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create");
 			}
+		}
+
+		private static string GenerarContenido(string contenido, string imagen)
+		{
+			contenido = WebUtility.HtmlDecode(contenido);
+
+			int i = 0;
+			while (i < 1000)
+			{
+				if (contenido.Contains("<div") == true)
+				{
+					int int1 = contenido.IndexOf("<div");
+					string temp1 = contenido.Remove(0, int1);
+
+					int int2 = temp1.IndexOf(">");
+					contenido = contenido.Remove(int1, int2 + 1);
+				}
+				else
+				{
+					break;
+				}
+
+				i += 1;
+			}
+
+			i = 0;
+			while (i < 1000)
+			{
+				if (contenido.Contains("<a") == true)
+				{
+					int int1 = contenido.IndexOf("<a");
+					string temp1 = contenido.Remove(0, int1);
+
+					int int2 = temp1.IndexOf(Strings.ChrW(34));
+					contenido = contenido.Remove(int1, int2 + 1);
+
+					contenido = contenido.Insert(int1, "[url=https://pepeizqdeals.com");
+
+					int int3 = contenido.IndexOf(Strings.ChrW(34));
+					string temp3 = contenido.Remove(0, int3);
+
+					int int4 = temp3.IndexOf(">");
+					contenido = contenido.Remove(int3, int4 + 1);
+
+					contenido = contenido.Insert(int3, "]");
+				}
+				else
+				{
+					break;
+				}
+
+				i += 1;
+			}
+
+			contenido = contenido.Replace("</div>", Environment.NewLine + Environment.NewLine);
+			contenido = contenido.Replace("<ul>", "[list]");
+			contenido = contenido.Replace("</ul>", "[/list]");
+			contenido = contenido.Replace("<li>", "[*]");
+			contenido = contenido.Replace("</li>", null);
+			contenido = contenido.Replace("</a>", "[/url]");
+
+			if (imagen != null)
+			{
+				contenido = "[img=" + imagen + "]" + Environment.NewLine + Environment.NewLine + contenido;
+			}
+
+			return contenido;
 		}
 	}
 }

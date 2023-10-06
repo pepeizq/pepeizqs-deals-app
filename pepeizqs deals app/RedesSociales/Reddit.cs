@@ -8,16 +8,21 @@ namespace RedesSociales
         {
             RedditSharp.Reddit cliente = new RedditSharp.Reddit();
             cliente.LogIn("pepeizq", "pepereddit605");
-            cliente.InitOrUpdateUser();
 
-            if (cliente.User != null) 
+            try
             {
-                RedditSharp.Things.Subreddit sub = cliente.GetSubreddit("/r/pepeizqdeals");
+				cliente.InitOrUpdateUser();
 
-				string enlace = RSS.BuscarEnlace(noticia);
+				if (cliente.User != null)
+				{
+					RedditSharp.Things.Subreddit sub = cliente.GetSubreddit("/r/pepeizqdeals");
 
-                sub.SubmitPost(noticia.TituloEn, enlace);
+					string enlace = RSS.BuscarEnlace(noticia);
+
+					sub.SubmitPost(noticia.TituloEn, enlace);
+				}
 			}
+            catch { }          
 		}
 	}
 }
