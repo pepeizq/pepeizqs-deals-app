@@ -27,7 +27,8 @@ namespace RedesSociales
 
             if (wv.CoreWebView2.DocumentTitle == "Steam Community :: Error")
             {
-                wv.Source = new Uri("https://steamcommunity.com/login/home/?goto=groups%2Fpepeizqdeals%2Fannouncements%2Fcreate");
+				await Task.Delay(15000);
+				wv.Source = new Uri("https://steamcommunity.com/login/home/?goto=groups%2Fpepeizqdeals%2Fannouncements%2Fcreate");
             }
             else
             {
@@ -46,6 +47,7 @@ namespace RedesSociales
 				{
 					if (wv.Source != new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create"))
 					{
+						await Task.Delay(5000);
 						wv.Source = new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create");
 					}					
 				}
@@ -66,7 +68,7 @@ namespace RedesSociales
 				await wv.ExecuteScriptAsync("document.getElementById('body').focus();");
 
 				await Task.Delay(1000);
-				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido(noticia.ContenidoEn, noticia.Imagen)) + "'");
+				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido(noticia.ContenidoEn, WebUtility.HtmlDecode(noticia.Imagen))) + "'");
 
 				await Task.Delay(1000);
 
@@ -81,13 +83,14 @@ namespace RedesSociales
 
 				await Task.Delay(1000);
 
-				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido(noticia.ContenidoEs, noticia.Imagen)) + "'");
+				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido(noticia.ContenidoEs, WebUtility.HtmlDecode(noticia.Imagen))) + "'");
 
 				await Task.Delay(1000);
 
+				await wv.ExecuteScriptAsync("document.getElementsByClassName('btn_green_white_innerfade btn_medium')[0].focus();");
 				await wv.ExecuteScriptAsync("document.getElementsByClassName('btn_green_white_innerfade btn_medium')[0].click();");
 
-				await Task.Delay(1000);
+				await Task.Delay(10000);
 
 				wv.Source = new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create");
 			}

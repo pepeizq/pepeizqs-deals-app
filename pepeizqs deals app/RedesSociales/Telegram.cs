@@ -1,4 +1,5 @@
 ﻿using Modulos;
+using System.Net;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -14,7 +15,7 @@ namespace RedesSociales
 
 			if (noticia.Imagen != null)
 			{
-				await cliente.SendPhotoAsync("@pepeizqdeals2", InputFile.FromUri(noticia.Imagen), 0, noticia.TituloEn + " " + enlace);
+				await cliente.SendPhotoAsync("@pepeizqdeals2", InputFile.FromUri(WebUtility.HtmlDecode(noticia.Imagen)), 0, noticia.TituloEn + " " + enlace);
 			}
 			else
 			{

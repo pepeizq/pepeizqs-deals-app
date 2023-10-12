@@ -3,6 +3,7 @@ using Discord.Webhook;
 using Modulos;
 using System;
 using System.Collections.Generic;
+using System.Net;
 
 namespace RedesSociales
 {
@@ -48,7 +49,7 @@ namespace RedesSociales
 
                     if (noticia.Imagen != null)
                     {
-                        constructor.ImageUrl = noticia.Imagen;
+                        constructor.ImageUrl = WebUtility.HtmlDecode(noticia.Imagen);
                     }
 
                     List<Embed> lista = new List<Embed>

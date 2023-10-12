@@ -73,12 +73,16 @@ namespace RedesSociales
 		{
 			TwitterClient cliente = (TwitterClient)ObjetosVentana.tbTwitterCodigo.Tag;
 
-			ITwitterResult resultado = await PonerTweet(cliente,
-			   new TweetV2PostRequest
-			   {
-				   Text = noticia.TituloEn + " " + Environment.NewLine + Environment.NewLine + RSS.BuscarEnlace(noticia)
-			   }
-		   );
+			try
+			{
+				ITwitterResult resultado = await PonerTweet(cliente,
+					new TweetV2PostRequest
+					{
+						Text = noticia.TituloEn + " " + Environment.NewLine + Environment.NewLine + RSS.BuscarEnlace(noticia)
+					}
+				);
+			}
+			catch { }		
 		}
 
 		public static Task<ITwitterResult> PonerTweet(TwitterClient cliente, TweetV2PostRequest parametros)
