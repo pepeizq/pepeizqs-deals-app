@@ -75,6 +75,11 @@ namespace pepeizqs_deals_app
 
 			//-----------------------------------------------------------------
 
+			ObjetosVentana.gridLogo = gridLogo;
+			ObjetosVentana.svLogo = svLogo;
+
+			//-----------------------------------------------------------------
+
 			ObjetosVentana.gridOpciones = gridOpciones;
 			ObjetosVentana.svOpciones = svOpciones;
 		}
@@ -127,17 +132,23 @@ namespace pepeizqs_deals_app
 
 			//-----------------------------------------------------------------
 
+			public static Grid gridLogo { get; set; }
+			public static ScrollViewer svLogo { get; set; }
+
+			//-----------------------------------------------------------------
+
 			public static Grid gridOpciones { get; set; }
 			public static ScrollViewer svOpciones { get; set; }
 		}
 
 		private void nvPrincipal_Loaded(object sender, RoutedEventArgs e)
 		{
+			Pestañas.CreadorItems("Logo");
 			Pestañas.CreadorItems("Steam");
 			Pestañas.CreadorItems("Twitter");
 			Pestañas.CreadorItems("RSS");
 			Pestañas.CreadorItems("Humble");
-			Pestañas.CreadorItems("Web");			
+			Pestañas.CreadorItems("Web");
 		}
 
 		private void nvPrincipal_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
@@ -191,6 +202,10 @@ namespace pepeizqs_deals_app
 							else if (tb.Text == "Steam")
 							{
 								Pestañas.Visibilidad(gridSteam, true, null, false);
+							}
+							else if (tb.Text == "Logo")
+							{
+								Pestañas.Visibilidad(gridLogo, true, null, false);
 							}
 						}
 					}
