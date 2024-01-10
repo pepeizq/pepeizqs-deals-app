@@ -11,32 +11,32 @@ namespace Modulos
 
         public static void Cargar()
         {
-            ObjetosVentana.wvWeb.Source = new Uri(dominio + "/Identity/Account/Login");
+			ObjetosVentana.wvWeb.Source = new Uri(dominio + "/Identity/Account/Login");
 
             ObjetosVentana.wvWeb.NavigationCompleted += CompletarCarga;
         }
 
         private static async void CompletarCarga(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
-            WebView2 wv = (WebView2)sender;
+			WebView2 wv = (WebView2)sender;
 
-            if (wv.Source == new Uri(dominio + "/Identity/Account/Login"))
-            {
-                string dato1 = "pepeizq@msn.com";
-                string dato2 = "Pepelu605*";
+			if (wv.Source == new Uri(dominio + "/Identity/Account/Login"))
+			{
+				string dato1 = "pepeizq@msn.com";
+				string dato2 = "Pepelu605*";
 
-                string email = "document.getElementById('Input_Email').value = '" + dato1 + "'";
+				string email = "document.getElementById('Input_Email').value = '" + dato1 + "'";
 
-                await wv.ExecuteScriptAsync(email);
+				await wv.ExecuteScriptAsync(email);
 
-                string contraseña = "document.getElementById('Input_Password').value = '" + dato2 + "'";
+				string contraseña = "document.getElementById('Input_Password').value = '" + dato2 + "'";
 
-                await wv.ExecuteScriptAsync(contraseña);
+				await wv.ExecuteScriptAsync(contraseña);
 
-                string click = "document.getElementById('login-submit').click();";
+				string click = "document.getElementById('login-submit').click();";
 
-                await wv.ExecuteScriptAsync(click);
-            }
-        }
+				await wv.ExecuteScriptAsync(click);
+			}
+		}
     }
 }

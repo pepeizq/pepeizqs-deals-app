@@ -25,10 +25,14 @@ namespace RedesSociales
 
 			ObjetosVentana.wvTwitter.NavigationCompleted += CompletarCarga;
 
-			IAuthenticationRequest peticion = await cliente.Auth.RequestAuthenticationUrlAsync();
+			try 
+			{
+				IAuthenticationRequest peticion = await cliente.Auth.RequestAuthenticationUrlAsync();
 
-			ObjetosVentana.wvTwitter.Source = new Uri(peticion.AuthorizationURL);
-			ObjetosVentana.wvTwitter.Tag = peticion;
+				ObjetosVentana.wvTwitter.Source = new Uri(peticion.AuthorizationURL);
+				ObjetosVentana.wvTwitter.Tag = peticion;
+			}
+			catch { }
 		}
 
 		private static async void CompletarCarga(object sender, CoreWebView2NavigationCompletedEventArgs e)

@@ -3,7 +3,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Media;
-using Microsoft.Windows.ApplicationModel.Resources;
 using Windows.UI;
 using static pepeizqs_deals_app.MainWindow;
 

@@ -184,6 +184,7 @@ namespace pepeizqs_deals_app
 
 							if (tb.Text == "Web")
 							{
+								Web.Cargar();
 								Pestañas.Visibilidad(gridWeb, true, null, false);
 							}
 							else if (tb.Text == "Humble")
