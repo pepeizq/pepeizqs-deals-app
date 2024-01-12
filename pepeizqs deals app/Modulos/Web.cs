@@ -35,7 +35,7 @@ namespace Modulos
 
 				string click = "document.getElementById('login-submit').click();";
 
-				await wv.ExecuteScriptAsync(click);
+				//await wv.ExecuteScriptAsync(click);
 			}
 		}
     }
