@@ -12,7 +12,7 @@
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
   <ItemGroup>
-    <Content Remove="Assets\Logo\final.png" />
+    <Content Remove="Assets\Logo\logo.png" />
   </ItemGroup>
 
   <ItemGroup>

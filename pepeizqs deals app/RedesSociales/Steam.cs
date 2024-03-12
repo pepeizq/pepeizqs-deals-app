@@ -158,6 +158,7 @@ namespace RedesSociales
 			contenido = contenido.Replace("<li>", "[*]");
 			contenido = contenido.Replace("</li>", null);
 			contenido = contenido.Replace("</a>", "[/url]");
+			contenido = contenido.Replace("<br/>", null);
 
 			if (imagen != null)
 			{

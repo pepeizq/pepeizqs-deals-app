@@ -177,14 +177,20 @@
 
                 <Grid x:Name="gridLogo" Visibility="Collapsed">
                     <ScrollViewer x:Name="svLogo" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <Grid>
-                            <!--<Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
+                        <Grid Padding="80" Width="600" Height="600">
+                            <Grid.Background>
+                                <LinearGradientBrush StartPoint="0.75,0" EndPoint="0,1">
+                                    <GradientStop Color="#0d1621" Offset="0.1" />
+                                    <GradientStop Color="#1b2838" Offset="0.5" />
+                                    <GradientStop Color="#0d1621" Offset="0.9" />
+                                </LinearGradientBrush>
+                            </Grid.Background>
 
-                            <TextBox x:Name="tbSteamEnlace" Grid.Row="0" TextWrapping="Wrap"/>
-                            <WebView2 x:Name="wvSteam" Grid.Row="1" MinWidth="400" MinHeight="400"/>-->
+                            <Image Source="https://i.imgur.com/4pA3k7W.png">
+                                <!--<Image.Shadow>
+                                    <ThemeShadow 
+                                </Image.Shadow>-->
+                            </Image>
                         </Grid>
                     </ScrollViewer>
                 </Grid>
