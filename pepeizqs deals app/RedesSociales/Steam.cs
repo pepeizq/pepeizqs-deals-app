@@ -35,10 +35,10 @@ namespace RedesSociales
 				if (wv.Source.AbsoluteUri.Contains("https://steamcommunity.com/login/home/?goto=groups%2Fpepeizqdeals%2Fannouncements%2Fcreate") == true)
 				{
 					await Task.Delay(5000);
-					await wv.ExecuteScriptAsync("document.getElementsByClassName('newlogindialog_TextInput_2eKVn')[0].value = 'pepeizqalt02'");
+					await wv.ExecuteScriptAsync("document.getElementsByClassName('newlogindialog_TextInput_2eKVn')[0].value = '" + DatosPersonales.SteamLogin + "'");
 
 					await Task.Delay(2000);
-					await wv.ExecuteScriptAsync("document.getElementsByClassName('newlogindialog_TextInput_2eKVn')[1].value = 'pepelu605'");
+					await wv.ExecuteScriptAsync("document.getElementsByClassName('newlogindialog_TextInput_2eKVn')[1].value = '" + DatosPersonales.SteamContraseña + "'");
 
 					await Task.Delay(2000);
 					//await wv.ExecuteScriptAsync("document.getElementsByClassName('newlogindialog_LoginForm_3Tsg9')[0].submit();");

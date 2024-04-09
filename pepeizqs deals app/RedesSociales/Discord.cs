@@ -21,11 +21,11 @@ namespace RedesSociales
 
             if (idioma == Idiomas.Ingles) 
             {
-                hook = "https://discordapp.com/api/webhooks/1148593428771381370/AdstfYvX0m34rDOVLasrU8Ed1ngX9qjfOtcb7v5vq9VPFP2i3G-p5hZxbuw8gvGyDap1";
+                hook = DatosPersonales.DiscordIngles;
             }
             else if (idioma == Idiomas.Español)
             {
-                hook = "https://discordapp.com/api/webhooks/1148600562846281849/6K4wF8DnzCAO24lihO5u4fXO9YbG4VsjjHcdxYYRItQXE7o2p3x7OEqzAisWWZ3ywTlS";
+                hook = DatosPersonales.DiscordEspañol;
             }
 
             if (hook != null)

@@ -7,7 +7,7 @@ namespace RedesSociales
         public static void Enviar(Noticia noticia)
         {
             RedditSharp.Reddit cliente = new RedditSharp.Reddit();
-            cliente.LogIn("pepeizq", "pepereddit605");
+            cliente.LogIn(DatosPersonales.RedditLogin, DatosPersonales.RedditContraseña);
 
             try
             {

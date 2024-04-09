@@ -18,8 +18,8 @@ namespace RedesSociales
 	{
 		public async static void Cargar()
 		{
-			TwitterClient cliente = new TwitterClient("4c67yvUZOS4mAfZAM0ixsNDUA", "XmMEJukGa3vKwPJIMZknd7GLgKok54sucYuYelRXIT5yRKunuW",
-				"1030738433105387520-U2pYtW6lZJdkHsI2Y9rJoBuuwtkmsi", "Du0nKe6HygQrfgXHwJTybLzfTt7G6IToLeVCxSczrPFLV");
+			TwitterClient cliente = new TwitterClient(DatosPersonales.TwitterConsumerKey, DatosPersonales.TwitterConsumerSecret,
+				DatosPersonales.TwitterAccessToken, DatosPersonales.TwitterAccessSecret);
 		
 			ObjetosVentana.tbTwitterCodigo.Tag = cliente;
 
