@@ -49,8 +49,6 @@ namespace Modulos
 						{
 							if (noticias.Count > 0)
 							{
-								noticias.Reverse();
-
 								wv.Visibility = Visibility.Collapsed;
 								ObjetosVentana.spRSSNoticias.Visibility = Visibility.Visible;
 								ObjetosVentana.spRSSNoticias.Children.Clear();
@@ -316,19 +314,20 @@ namespace Modulos
 
     public class Noticia
     {
-        public int Id;
-        public int Tipo;
-        public int BundleTipo;
-        public int GratisTipo;
-        public int SuscripcionTipo;
-        public string TituloEn;
-        public string TituloEs;
-        public string ContenidoEn;
-        public string ContenidoEs;
-        public string Imagen;
-        public string Enlace;
-        public string Juegos;
-        public DateTime FechaEmpieza;
-        public DateTime FechaTermina;
-    }
+        public int Id { get; set; }
+		public int Tipo { get; set; }
+		public int BundleTipo { get; set; }
+		public int GratisTipo { get; set; }
+		public int SuscripcionTipo { get; set; }
+		public string TituloEn { get; set; }
+		public string TituloEs { get; set; }
+		public string ContenidoEn { get; set; }
+		public string ContenidoEs { get; set; }
+		public string Imagen { get; set; }
+		public string Enlace { get; set; }
+		public string Juegos { get; set; }
+		public DateTime FechaEmpieza { get; set; }
+		public DateTime FechaTermina { get; set; }
+		public int BundleId { get; set; }
+	}
 }
