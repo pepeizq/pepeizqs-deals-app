@@ -11,7 +11,7 @@ namespace Modulos
 
         public static void Cargar()
         {
-			ObjetosVentana.wvWeb.Source = new Uri(dominio + "/Identity/Account/Login");
+			ObjetosVentana.wvWeb.Source = new Uri(dominio + "/account/login");
 
             ObjetosVentana.wvWeb.NavigationCompleted += CompletarCarga;
         }
@@ -20,10 +20,10 @@ namespace Modulos
         {
 			WebView2 wv = (WebView2)sender;
 
-			if (wv.Source == new Uri(dominio + "/Identity/Account/Login"))
+			if (wv.Source == new Uri(dominio + "/account/login"))
 			{
-				string dato1 = "pepeizq@msn.com";
-				string dato2 = "Pepelu605*";
+				string dato1 = DatosPersonales.WebCorreo;
+				string dato2 = DatosPersonales.WebContraseña;
 
 				string email = "document.getElementById('Input_Email').value = '" + dato1 + "'";
 
@@ -35,7 +35,7 @@ namespace Modulos
 
 				string click = "document.getElementById('login-submit').click();";
 
-				//await wv.ExecuteScriptAsync(click);
+				await wv.ExecuteScriptAsync(click);
 			}
 		}
     }
