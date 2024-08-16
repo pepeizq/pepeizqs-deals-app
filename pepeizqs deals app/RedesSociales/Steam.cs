@@ -152,6 +152,35 @@ namespace RedesSociales
 				i += 1;
 			}
 
+			i = 0;
+			while (i < 1000)
+			{
+				if (contenido.Contains("<img") == true)
+				{
+					int int1 = contenido.IndexOf("<img");
+					string temp1 = contenido.Remove(0, int1);
+
+					int int2 = temp1.IndexOf(Strings.ChrW(34));
+					contenido = contenido.Remove(int1, int2 + 1);
+
+					contenido = contenido.Insert(int1, "[img=");
+
+					int int3 = contenido.IndexOf(Strings.ChrW(34));
+					string temp3 = contenido.Remove(0, int3);
+
+					int int4 = temp3.IndexOf(">");
+					contenido = contenido.Remove(int3, int4 + 1);
+
+					contenido = contenido.Insert(int3, "]");
+				}
+				else
+				{
+					break;
+				}
+
+				i += 1;
+			}
+
 			contenido = contenido.Replace("</div>", Environment.NewLine + Environment.NewLine);
 			contenido = contenido.Replace("<ul>", "[list]");
 			contenido = contenido.Replace("</ul>", "[/list]");
