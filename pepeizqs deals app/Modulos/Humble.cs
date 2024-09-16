@@ -82,25 +82,32 @@ namespace Modulos
 			{
                 if (pagina < numPaginas)
                 {
-					if (html != null)
+					if (string.IsNullOrEmpty(html) == false)
 					{
-						html = html.Replace("'", "");
+                        html = html.Replace("'", "");
 
-						string inyectarhtml = "document.getElementById('humble-texto').value = '" + html + "'";
-						html = null;
+                        if (html == "null")
+						{
+                            pagina -= 1;
+                        }
+						else
+						{
+                            string inyectarhtml = "document.getElementById('humble-texto').value = '" + html + "'";
+                            html = null;
 
-						await wv.ExecuteScriptAsync(inyectarhtml);
+                            await wv.ExecuteScriptAsync(inyectarhtml);
 
-						await Task.Delay(2000);
+                            await Task.Delay(2000);
 
-						string click = "document.getElementById('humble-cargar').click();";
+                            string click = "document.getElementById('humble-cargar').click();";
 
-						await wv.ExecuteScriptAsync(click);
+                            await wv.ExecuteScriptAsync(click);
 
-						await Task.Delay(2000);
+                            await Task.Delay(2000);
 
-						pagina += 1;
-						wv.Source = new Uri("https://www.humblebundle.com/store/api/search?filter=onsale&sort=discount&request=2&page_size=20&page=" + pagina.ToString());
+                            pagina += 1;
+                            wv.Source = new Uri("https://www.humblebundle.com/store/api/search?filter=onsale&sort=discount&request=2&page_size=20&page=" + pagina.ToString());
+                        }
 					}
 				}
 				else
