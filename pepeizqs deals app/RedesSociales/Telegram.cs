@@ -15,8 +15,22 @@ namespace RedesSociales
 
 			if (noticia.Imagen != null)
 			{
-				await cliente.SendPhotoAsync("@pepeizqdeals2", InputFile.FromUri(WebUtility.HtmlDecode(noticia.Imagen)), 0, noticia.TituloEn + " " + enlace);
-			}
+				bool error = false;
+
+				try
+				{
+                    await cliente.SendPhotoAsync("@pepeizqdeals2", InputFile.FromUri(WebUtility.HtmlDecode(noticia.Imagen)), 0, noticia.TituloEn + " " + enlace);
+                }
+				catch 
+				{ 
+					error = true;
+				}
+
+                if (error == true)
+                {
+                    await cliente.SendTextMessageAsync("@pepeizqdeals2", noticia.TituloEn + " " + enlace);
+                }
+            }
 			else
 			{
 				await cliente.SendTextMessageAsync("@pepeizqdeals2", noticia.TituloEn + " " + enlace);

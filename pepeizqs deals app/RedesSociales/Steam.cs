@@ -68,7 +68,7 @@ namespace RedesSociales
 				await wv.ExecuteScriptAsync("document.getElementById('body').focus();");
 
 				await Task.Delay(1000);
-				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido(noticia.ContenidoEn, WebUtility.HtmlDecode(noticia.Imagen))) + "'");
+				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido("https://pepeizqdeals.com/news/" + noticia.Id.ToString() + "/", noticia.ContenidoEn, WebUtility.HtmlDecode(noticia.Imagen))) + "'");
 
 				await Task.Delay(1000);
 
@@ -83,7 +83,7 @@ namespace RedesSociales
 
 				await Task.Delay(1000);
 
-				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido(noticia.ContenidoEs, WebUtility.HtmlDecode(noticia.Imagen))) + "'");
+				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido("https://pepeizqdeals.com/news/" + noticia.Id.ToString() + "/", noticia.ContenidoEs, WebUtility.HtmlDecode(noticia.Imagen))) + "'");
 
 				await Task.Delay(1000);
 
@@ -100,9 +100,11 @@ namespace RedesSociales
 			}
 		}
 
-		private static string GenerarContenido(string contenido, string imagen)
+		private static string GenerarContenido(string enlace, string contenido2, string imagen)
 		{
-			contenido = WebUtility.HtmlDecode(contenido);
+			string contenido = "[url=" + enlace + "]Link[/url]" + Environment.NewLine + Environment.NewLine;
+
+			contenido = contenido + WebUtility.HtmlDecode(contenido2);
 
 			int i = 0;
 			while (i < 1000)
@@ -134,7 +136,7 @@ namespace RedesSociales
 					int int2 = temp1.IndexOf(Strings.ChrW(34));
 					contenido = contenido.Remove(int1, int2 + 1);
 
-					contenido = contenido.Insert(int1, "[url=https://pepeizqdeals.com");
+					contenido = contenido.Insert(int1, "[url=");
 
 					int int3 = contenido.IndexOf(Strings.ChrW(34));
 					string temp3 = contenido.Remove(0, int3);
