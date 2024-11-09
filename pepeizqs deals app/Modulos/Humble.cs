@@ -20,12 +20,13 @@ namespace Modulos
 			ObjetosVentana.botonHumbleArrancar.PointerEntered += Animaciones.EntraRatonBoton2;
 			ObjetosVentana.botonHumbleArrancar.PointerExited += Animaciones.SaleRatonBoton2;
 
-			ObjetosVentana.wvHumble.NavigationCompleted += CompletarCarga;
+			ObjetosVentana.wvHumbleAPI.NavigationCompleted += CompletarCarga;
 		}
 
 		private static void ArrancarClick(object sender, RoutedEventArgs e)
 		{
-			ObjetosVentana.wvHumble.Source = new Uri("https://www.humblebundle.com/store/api/search?filter=onsale&sort=discount&request=2&page_size=20&page=0");
+			ObjetosVentana.wvHumbleAPI.Source = new Uri("https://www.humblebundle.com/store/api/search?filter=onsale&sort=discount&request=2&page_size=20&page=0");
+			ObjetosVentana.wvHumbleWeb.Source = new Uri("https://pepeizqdeals.com/admin/humble");
 		}
 
 		private static async void CompletarCarga(object sender, CoreWebView2NavigationCompletedEventArgs e)
@@ -76,43 +77,29 @@ namespace Modulos
 
 				await Task.Delay(2000);
 
-				wv.Source = new Uri(Web.dominio + "/Admin/Humble");
-            }
-			else if (wv.Source == new Uri(Web.dominio + "/Admin/Humble"))
-			{
-                if (pagina < numPaginas)
-                {
+				if (pagina < numPaginas)
+				{
 					if (string.IsNullOrEmpty(html) == false)
 					{
-                        html = html.Replace("'", "");
+						html = html.Replace("'", "");
 
-                        if (html == "null")
+						if (html == "null")
 						{
-                            pagina -= 1;
-                        }
+							pagina -= 1;
+						}
 						else
 						{
-                            string inyectarhtml = "document.getElementById('humble-texto').value = '" + html + "'";
-                            html = null;
+							string inyectarhtml = "document.getElementById('humble-texto').value = '" + html + "'";
+							html = null;
 
-                            await wv.ExecuteScriptAsync(inyectarhtml);
+							await ObjetosVentana.wvHumbleWeb.ExecuteScriptAsync(inyectarhtml);
 
-                            await Task.Delay(2000);
+							await Task.Delay(3000);
 
-                            string click = "document.getElementById('humble-cargar').click();";
-
-                            await wv.ExecuteScriptAsync(click);
-
-                            await Task.Delay(2000);
-
-                            pagina += 1;
-                            wv.Source = new Uri("https://www.humblebundle.com/store/api/search?filter=onsale&sort=discount&request=2&page_size=20&page=" + pagina.ToString());
-                        }
+							pagina += 1;
+							wv.Source = new Uri("https://www.humblebundle.com/store/api/search?filter=onsale&sort=discount&request=2&page_size=20&page=" + pagina.ToString());
+						}
 					}
-				}
-				else
-				{
-
 				}
 			}
         }

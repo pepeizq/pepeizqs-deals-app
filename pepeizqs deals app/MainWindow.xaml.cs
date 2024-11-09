@@ -49,7 +49,8 @@ namespace pepeizqs_deals_app
 			ObjetosVentana.svHumble = svHumble;
 			ObjetosVentana.botonHumbleArrancar = botonHumbleArrancar;
 			ObjetosVentana.tbHumblePaginas = tbHumblePaginas;
-            ObjetosVentana.wvHumble = wvHumble;
+			ObjetosVentana.wvHumbleAPI = wvHumbleAPI;
+			ObjetosVentana.wvHumbleWeb = wvHumbleWeb;
 
 			//-----------------------------------------------------------------
 
@@ -99,7 +100,8 @@ namespace pepeizqs_deals_app
 			public static ScrollViewer svHumble { get; set; }
 			public static Button botonHumbleArrancar { get; set; }
 			public static TextBlock tbHumblePaginas { get; set; }
-            public static WebView2 wvHumble { get; set; }
+            public static WebView2 wvHumbleAPI { get; set; }
+			public static WebView2 wvHumbleWeb { get; set; }
 
 			//-----------------------------------------------------------------
 
