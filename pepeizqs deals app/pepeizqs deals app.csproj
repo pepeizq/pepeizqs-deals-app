@@ -27,12 +27,11 @@
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="Discord.Net" Version="3.12.0" />
     <PackageReference Include="FontAwesome6.Fonts.WinUI" Version="2.5.1" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.231115000" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240923002" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.2428" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RedditSharp" Version="1.1.0" />
     <PackageReference Include="Telegram.Bot" Version="19.0.0" />
-    <PackageReference Include="TweetinviAPI" Version="5.0.4" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 

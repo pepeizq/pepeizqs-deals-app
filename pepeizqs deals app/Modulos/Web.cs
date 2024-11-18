@@ -16,7 +16,7 @@ namespace Modulos
             ObjetosVentana.wvWeb.NavigationCompleted += CompletarCarga;
         }
 
-        private static async void CompletarCarga(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        private static async void CompletarCarga(object sender, object e)
         {
 			WebView2 wv = (WebView2)sender;
 

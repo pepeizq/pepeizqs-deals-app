@@ -9,20 +9,15 @@ namespace RedesSociales
             RedditSharp.Reddit cliente = new RedditSharp.Reddit();
             cliente.LogIn(DatosPersonales.RedditLogin, DatosPersonales.RedditContraseña);
 
-            try
-            {
-				cliente.InitOrUpdateUser();
+			cliente.InitOrUpdateUser();
 
-				if (cliente.User != null)
-				{
-					RedditSharp.Things.Subreddit sub = cliente.GetSubreddit("/r/pepeizqdeals");
+			if (cliente.User != null)
+			{
+				RedditSharp.Things.Subreddit sub = cliente.GetSubreddit("/r/pepeizqdeals");
+				string enlace = RSS.BuscarEnlace(noticia);
 
-					string enlace = RSS.BuscarEnlace(noticia);
-
-					sub.SubmitPost(noticia.TituloEn, enlace);
-				}
+				sub.SubmitPost(noticia.TituloEn, enlace);
 			}
-            catch { }          
 		}
 	}
 }

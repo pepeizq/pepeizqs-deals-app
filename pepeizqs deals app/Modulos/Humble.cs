@@ -1,7 +1,7 @@
 ﻿using Interfaz;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.Web.WebView2.Core;
+using Microsoft.VisualBasic;
 using System;
 using System.Threading.Tasks;
 using static pepeizqs_deals_app.MainWindow;
@@ -29,13 +29,13 @@ namespace Modulos
 			ObjetosVentana.wvHumbleWeb.Source = new Uri("https://pepeizqdeals.com/admin/humble");
 		}
 
-		private static async void CompletarCarga(object sender, CoreWebView2NavigationCompletedEventArgs e)
+		private static async void CompletarCarga(object sender, object e)
 		{
 			ObjetosVentana.tbHumblePaginas.Text = pagina.ToString() + "/" + numPaginas.ToString();
 
             WebView2 wv = (WebView2)sender;
 
-            if (wv.Source.AbsoluteUri.Contains("https://www.humblebundle.com/store/api/") == true)
+			if (wv.Source.AbsoluteUri.Contains("https://www.humblebundle.com/store/api/") == true)
 			{
 				html = await wv.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML");
 
@@ -89,13 +89,12 @@ namespace Modulos
 						}
 						else
 						{
-							string inyectarhtml = "document.getElementById('humble-texto').value = '" + html + "'";
+							await ObjetosVentana.wvHumbleWeb.ExecuteScriptAsync("document.getElementById('humble-texto').innerHTML = " + Strings.ChrW(34) + html + Strings.ChrW(34) + ";");
+							await Task.Delay(2000);
+							await ObjetosVentana.wvHumbleWeb.ExecuteScriptAsync("document.getElementById('humble-enviar').click();");
+							await Task.Delay(2000);
+
 							html = null;
-
-							await ObjetosVentana.wvHumbleWeb.ExecuteScriptAsync(inyectarhtml);
-
-							await Task.Delay(3000);
-
 							pagina += 1;
 							wv.Source = new Uri("https://www.humblebundle.com/store/api/search?filter=onsale&sort=discount&request=2&page_size=20&page=" + pagina.ToString());
 						}

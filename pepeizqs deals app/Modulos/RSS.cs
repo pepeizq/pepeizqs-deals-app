@@ -23,7 +23,7 @@ namespace Modulos
             ObjetosVentana.wvRSS.Source = new Uri("https://pepeizqdeals.com/news-rss"); 
         }
 
-        private static async void CompletarCarga(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        private static async void CompletarCarga(object sender, object e)
         {
             WebView2 wv = (WebView2)sender;
 
@@ -238,11 +238,43 @@ namespace Modulos
 			Button boton = (Button)sender;
 			Noticia noticia = (Noticia)boton.Tag;
 
-			RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Ingles);
-			RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Español);
-            RedesSociales.Telegram.Enviar(noticia);
-			RedesSociales.Reddit.Enviar(noticia);
-			RedesSociales.Steam.Enviar(noticia);
+			try
+			{
+				RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Ingles);
+				RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Español);
+			}
+			catch
+			{
+				Herramientas.Notificaciones.Toast("Fallo Discord");
+			}
+
+			try
+			{
+				RedesSociales.Telegram.Enviar(noticia);
+			}
+			catch
+			{
+				Herramientas.Notificaciones.Toast("Fallo Telegram");
+			}
+
+			try
+			{
+				RedesSociales.Reddit.Enviar(noticia);
+			}
+			catch
+			{
+				Herramientas.Notificaciones.Toast("Fallo Reddit");
+			}
+		
+			try
+			{
+				RedesSociales.Steam.Enviar(noticia);
+			}
+			catch 
+			{
+				Herramientas.Notificaciones.Toast("Fallo Steam");
+			}
+			
 			Pestañas.Visibilidad(ObjetosVentana.gridSteam, true, null, false);
 		}
 
