@@ -57,21 +57,18 @@ namespace Modulos
 
 					if (html != "null")
 					{
-						if (numPaginas == 0)
-						{
-							string temp1 = html;
+						string temp1 = html;
 
-							int int2 = temp1.IndexOf("num_pages");
-							string temp2 = temp1.Remove(0, int2);
+						int int2 = temp1.IndexOf("num_pages");
+						string temp2 = temp1.Remove(0, int2);
 
-							int int3 = temp2.IndexOf(":");
-							string temp3 = temp2.Remove(0, int3 + 1);
+						int int3 = temp2.IndexOf(":");
+						string temp3 = temp2.Remove(0, int3 + 1);
 
-							int int4 = temp3.IndexOf(",");
-							string temp4 = temp3.Remove(int4, temp3.Length - int4);
+						int int4 = temp3.IndexOf(",");
+						string temp4 = temp3.Remove(int4, temp3.Length - int4);
 
-							numPaginas = int.Parse(temp4);
-						}
+						numPaginas = int.Parse(temp4);
 					}
                 }
 
