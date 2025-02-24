@@ -1,6 +1,5 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using Microsoft.VisualBasic;
-using Microsoft.Web.WebView2.Core;
 using Modulos;
 using System;
 using System.Net;
@@ -109,54 +108,6 @@ namespace RedesSociales
 			int i = 0;
 			while (i < 1000)
 			{
-				if (contenido.Contains("<div") == true)
-				{
-					int int1 = contenido.IndexOf("<div");
-					string temp1 = contenido.Remove(0, int1);
-
-					int int2 = temp1.IndexOf(">");
-					contenido = contenido.Remove(int1, int2 + 1);
-				}
-				else
-				{
-					break;
-				}
-
-				i += 1;
-			}
-
-			i = 0;
-			while (i < 1000)
-			{
-				if (contenido.Contains("<a") == true)
-				{
-					int int1 = contenido.IndexOf("<a");
-					string temp1 = contenido.Remove(0, int1);
-
-					int int2 = temp1.IndexOf(Strings.ChrW(34));
-					contenido = contenido.Remove(int1, int2 + 1);
-
-					contenido = contenido.Insert(int1, "[url=");
-
-					int int3 = contenido.IndexOf(Strings.ChrW(34));
-					string temp3 = contenido.Remove(0, int3);
-
-					int int4 = temp3.IndexOf(">");
-					contenido = contenido.Remove(int3, int4 + 1);
-
-					contenido = contenido.Insert(int3, "]");
-				}
-				else
-				{
-					break;
-				}
-
-				i += 1;
-			}
-
-			i = 0;
-			while (i < 1000)
-			{
 				if (contenido.Contains("<img") == true)
 				{
 					int int1 = contenido.IndexOf("<img");
@@ -183,13 +134,17 @@ namespace RedesSociales
 				i += 1;
 			}
 
-			contenido = contenido.Replace("</div>", Environment.NewLine + Environment.NewLine);
+			contenido = contenido.Replace("<a href=" + Strings.ChrW(34), "[url=");
+			contenido = contenido.Replace(Strings.ChrW(34) + " target=" + Strings.ChrW(34) + "_blank" + Strings.ChrW(34) + ">", "]");
+			contenido = contenido.Replace("<div>", null);
+			contenido = contenido.Replace("<div style=" + Strings.ChrW(34) + "margin-top: 20px;" + Strings.ChrW(34) + ">", Environment.NewLine + Environment.NewLine);
+			contenido = contenido.Replace("</div>", null);
 			contenido = contenido.Replace("<ul>", "[list]");
 			contenido = contenido.Replace("</ul>", "[/list]");
 			contenido = contenido.Replace("<li>", "[*]");
 			contenido = contenido.Replace("</li>", null);
 			contenido = contenido.Replace("</a>", "[/url]");
-			contenido = contenido.Replace("<br/>", null);
+			contenido = contenido.Replace("<br/>", Environment.NewLine);
 
 			if (imagen != null)
 			{
