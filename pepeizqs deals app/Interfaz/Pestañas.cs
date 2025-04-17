@@ -62,7 +62,7 @@ namespace Interfaz
             ObjetosVentana.gridHumble.Visibility = Visibility.Collapsed;
 			ObjetosVentana.gridRSS.Visibility = Visibility.Collapsed;
 			ObjetosVentana.gridSteam.Visibility = Visibility.Collapsed;
-			ObjetosVentana.gridLogo.Visibility = Visibility.Collapsed;
+			ObjetosVentana.gridReddit.Visibility = Visibility.Collapsed;
 			ObjetosVentana.gridOpciones.Visibility = Visibility.Collapsed;
 
 			grid.Visibility = Visibility.Visible;

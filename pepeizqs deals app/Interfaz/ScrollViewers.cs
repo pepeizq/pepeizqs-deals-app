@@ -18,7 +18,7 @@ namespace Interfaz
             ObjetosVentana.svHumble.ViewChanging += svScroll;
 			ObjetosVentana.svRSS.ViewChanging += svScroll;
 			ObjetosVentana.svSteam.ViewChanging += svScroll;
-			ObjetosVentana.svLogo.ViewChanging += svScroll;
+			ObjetosVentana.svReddit.ViewChanging += svScroll;
 			ObjetosVentana.svOpciones.ViewChanging += svScroll;
 		}
 
@@ -60,9 +60,9 @@ namespace Interfaz
 			{
 				ObjetosVentana.svSteam.ChangeView(null, 0, null);
 			}
-			else if (ObjetosVentana.gridLogo.Visibility == Visibility.Visible)
+			else if (ObjetosVentana.gridReddit.Visibility == Visibility.Visible)
 			{
-				ObjetosVentana.svLogo.ChangeView(null, 0, null);
+				ObjetosVentana.svReddit.ChangeView(null, 0, null);
 			}
 			else if (ObjetosVentana.gridOpciones.Visibility == Visibility.Visible)
             {

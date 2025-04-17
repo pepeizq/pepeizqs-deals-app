@@ -22,6 +22,7 @@ namespace pepeizqs_deals_app
 			Web.Cargar();
 			Humble.Cargar();
 			Steam.Cargar();
+			Reddit.Cargar();
 
 			Pestañas.Visibilidad(gridWeb, true, null, false);
 		}
@@ -68,8 +69,12 @@ namespace pepeizqs_deals_app
 
 			//-----------------------------------------------------------------
 
-			ObjetosVentana.gridLogo = gridLogo;
-			ObjetosVentana.svLogo = svLogo;
+			ObjetosVentana.gridReddit = gridReddit;
+			ObjetosVentana.svReddit = svReddit;
+			ObjetosVentana.botonRedditArrancar = botonRedditArrancar;
+			ObjetosVentana.botonRedditSumar = botonRedditSumar;
+			ObjetosVentana.tbRedditEnlace = tbRedditEnlace;
+			ObjetosVentana.wvReddit = wvReddit;
 
 			//-----------------------------------------------------------------
 
@@ -119,8 +124,12 @@ namespace pepeizqs_deals_app
 
 			//-----------------------------------------------------------------
 
-			public static Grid gridLogo { get; set; }
-			public static ScrollViewer svLogo { get; set; }
+			public static Grid gridReddit { get; set; }
+			public static ScrollViewer svReddit { get; set; }
+			public static Button botonRedditArrancar { get; set; }
+			public static Button botonRedditSumar { get; set; }
+			public static TextBox tbRedditEnlace { get; set; }
+			public static WebView2 wvReddit { get; set; }
 
 			//-----------------------------------------------------------------
 
@@ -130,7 +139,7 @@ namespace pepeizqs_deals_app
 
 		private void nvPrincipal_Loaded(object sender, RoutedEventArgs e)
 		{
-			Pestañas.CreadorItems("Logo");
+			Pestañas.CreadorItems("Reddit");
 			Pestañas.CreadorItems("Steam");
 			Pestañas.CreadorItems("RSS");
 			Pestañas.CreadorItems("Humble");
@@ -186,9 +195,9 @@ namespace pepeizqs_deals_app
 							{
 								Pestañas.Visibilidad(gridSteam, true, null, false);
 							}
-							else if (tb.Text == "Logo")
+							else if (tb.Text == "Reddit")
 							{
-								Pestañas.Visibilidad(gridLogo, true, null, false);
+								Pestañas.Visibilidad(gridReddit, true, null, false);
 							}
 						}
 					}

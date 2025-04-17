@@ -3,7 +3,6 @@ using Interfaz;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
-using Microsoft.Web.WebView2.Core;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -110,72 +109,6 @@ namespace Modulos
 									sp.Children.Add(botonTodo);
 									#endregion
 
-									#region Discord
-									FontAwesome iconoDiscord = new FontAwesome
-									{
-										Icon = FontAwesome6.EFontAwesomeIcon.Brands_Discord,
-										Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
-									};
-
-									Button2 botonDiscord = new Button2
-									{
-										Tag = noticia,
-										Content = iconoDiscord,
-										Margin = new Thickness(20, 0, 0, 0),
-										Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
-									};
-
-									botonDiscord.Click += ClickDiscord;
-									botonDiscord.PointerEntered += Animaciones.EntraRatonBoton2;
-									botonDiscord.PointerExited += Animaciones.SaleRatonBoton2;
-
-									sp.Children.Add(botonDiscord);
-									#endregion
-
-									#region Telegram
-									FontAwesome iconoTelegram = new FontAwesome
-									{
-										Icon = FontAwesome6.EFontAwesomeIcon.Brands_Telegram,
-										Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
-									};
-
-									Button2 botonTelegram = new Button2
-									{
-										Tag = noticia,
-										Content = iconoTelegram,
-										Margin = new Thickness(20, 0, 0, 0),
-										Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
-									};
-
-									botonTelegram.Click += ClickTelegram;
-									botonTelegram.PointerEntered += Animaciones.EntraRatonBoton2;
-									botonTelegram.PointerExited += Animaciones.SaleRatonBoton2;
-
-									sp.Children.Add(botonTelegram);
-									#endregion
-
-									#region Reddit
-									FontAwesome iconoReddit = new FontAwesome
-									{
-										Icon = FontAwesome6.EFontAwesomeIcon.Brands_Reddit,
-										Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
-									};
-
-									Button2 botonReddit = new Button2
-									{
-										Tag = noticia,
-										Content = iconoReddit,
-										Margin = new Thickness(20, 0, 0, 0),
-										Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
-									};
-
-									botonReddit.Click += ClickReddit;
-									botonReddit.PointerEntered += Animaciones.EntraRatonBoton2;
-									botonReddit.PointerExited += Animaciones.SaleRatonBoton2;
-
-									sp.Children.Add(botonReddit);
-									#endregion
-
 									#region Steam
 									FontAwesome iconoSteam = new FontAwesome
 									{
@@ -237,34 +170,6 @@ namespace Modulos
 		{
 			Button boton = (Button)sender;
 			Noticia noticia = (Noticia)boton.Tag;
-
-			try
-			{
-				RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Ingles);
-				RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Español);
-			}
-			catch
-			{
-				Herramientas.Notificaciones.Toast("Fallo Discord");
-			}
-
-			try
-			{
-				RedesSociales.Telegram.Enviar(noticia);
-			}
-			catch
-			{
-				Herramientas.Notificaciones.Toast("Fallo Telegram");
-			}
-
-			try
-			{
-				RedesSociales.Reddit.Enviar(noticia);
-			}
-			catch
-			{
-				Herramientas.Notificaciones.Toast("Fallo Reddit");
-			}
 		
 			try
 			{
@@ -276,31 +181,6 @@ namespace Modulos
 			}
 			
 			Pestañas.Visibilidad(ObjetosVentana.gridSteam, true, null, false);
-		}
-
-		public static void ClickDiscord(object sender, RoutedEventArgs e)
-        {
-            Button boton = (Button)sender;
-            Noticia noticia = (Noticia)boton.Tag;
-
-            RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Ingles);
-            RedesSociales.Discord.Enviar(noticia, RedesSociales.Idiomas.Español);
-        }
-
-		public static void ClickTelegram(object sender, RoutedEventArgs e)
-		{
-			Button boton = (Button)sender;
-			Noticia noticia = (Noticia)boton.Tag;
-
-			RedesSociales.Telegram.Enviar(noticia);
-		}
-
-		public static void ClickReddit(object sender, RoutedEventArgs e)
-		{
-			Button boton = (Button)sender;
-			Noticia noticia = (Noticia)boton.Tag;
-
-			RedesSociales.Reddit.Enviar(noticia);
 		}
 
 		public static void ClickSteam(object sender, RoutedEventArgs e)
