@@ -1,8 +1,11 @@
 ﻿using Interfaz;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.VisualBasic;
 using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static pepeizqs_deals_app.MainWindow;
 
@@ -26,7 +29,6 @@ namespace Modulos
 		private static void ArrancarClick(object sender, RoutedEventArgs e)
 		{
 			ObjetosVentana.wvHumbleAPI.Source = new Uri("https://www.humblebundle.com/store/api/search?filter=onsale&sort=discount&request=2&page_size=20&page=0");
-			ObjetosVentana.wvHumbleWeb.Source = new Uri("https://pepeizqdeals.com/admin/humble");
 		}
 
 		private static async void CompletarCarga(object sender, object e)
@@ -39,7 +41,7 @@ namespace Modulos
 			{
 				html = await wv.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML");
 
-				if (html != null)
+				if (string.IsNullOrEmpty(html) == false)
 				{
 					if (html.Contains("{"))
 					{
@@ -60,19 +62,32 @@ namespace Modulos
 						string temp1 = html;
 
 						int int2 = temp1.IndexOf("num_pages");
-						string temp2 = temp1.Remove(0, int2);
 
-						int int3 = temp2.IndexOf(":");
-						string temp3 = temp2.Remove(0, int3 + 1);
+						if (int2 > -1)
+						{
+							string temp2 = temp1.Remove(0, int2);
 
-						int int4 = temp3.IndexOf(",");
-						string temp4 = temp3.Remove(int4, temp3.Length - int4);
+							int int3 = temp2.IndexOf(":");
+							string temp3 = temp2.Remove(0, int3 + 1);
 
-						numPaginas = int.Parse(temp4);
+							int int4 = temp3.IndexOf(",");
+							string temp4 = temp3.Remove(int4, temp3.Length - int4);
+
+							numPaginas = int.Parse(temp4);
+						}
 					}
                 }
 
-				await Task.Delay(2000);
+				Random azar = new Random();
+
+				if (numPaginas < 100)
+				{
+					await Task.Delay(azar.Next(1000, 5000));
+				}
+				else 
+				{
+					await Task.Delay(azar.Next(1000, 10000));
+				}
 
 				if (pagina < numPaginas)
 				{
@@ -86,10 +101,50 @@ namespace Modulos
 						}
 						else
 						{
-							await ObjetosVentana.wvHumbleWeb.ExecuteScriptAsync("document.getElementById('humble-texto').innerHTML = " + Strings.ChrW(34) + html + Strings.ChrW(34) + ";");
-							await Task.Delay(2000);
-							await ObjetosVentana.wvHumbleWeb.ExecuteScriptAsync("document.getElementById('humble-enviar').click();");
-							await Task.Delay(2000);
+							HumbleJuegos juegos = null;
+
+							try
+							{
+								juegos = JsonSerializer.Deserialize<HumbleJuegos>(System.Text.RegularExpressions.Regex.Unescape(html));
+							}
+							catch { }
+
+							if (juegos != null)
+							{
+								if (juegos.Resultados?.Count > 0)
+								{
+									using (SqlConnection conexion = new SqlConnection(DatosPersonales.Servidor))
+									{
+										conexion.Open();
+
+										if (conexion.State == System.Data.ConnectionState.Open)
+										{
+											foreach (HumbleJuego juego in juegos.Resultados)
+											{
+												string sqlAñadir = "INSERT INTO temporalhumble " +
+														"(contenido, fecha, enlace) VALUES " +
+														"(@contenido, @fecha, @enlace) ";
+
+												using (SqlCommand comando = new SqlCommand(sqlAñadir, conexion))
+												{
+													comando.Parameters.AddWithValue("@contenido", JsonSerializer.Serialize(juego));
+													comando.Parameters.AddWithValue("@fecha", DateTime.Now);
+													comando.Parameters.AddWithValue("@enlace", juego.Enlace);
+
+													try
+													{
+														comando.ExecuteNonQuery();
+													}
+													catch
+													{
+
+													}
+												}
+											}
+										}
+									}
+								}
+							}
 
 							html = null;
 							pagina += 1;
@@ -99,5 +154,62 @@ namespace Modulos
 				}
 			}
         }
+	}
+
+	public class HumbleJuegos
+	{
+		[JsonPropertyName("num_pages")]
+		public int Numero { get; set; }
+
+		[JsonPropertyName("results")]
+		public List<HumbleJuego> Resultados { get; set; }
+	}
+
+	public class HumbleJuego
+	{
+		[JsonPropertyName("human_name")]
+		public string Nombre { get; set; }
+
+		[JsonPropertyName("machine_name")]
+		public string Id { get; set; }
+
+		[JsonPropertyName("standard_carousel_image")]
+		public string ImagenPequeña { get; set; }
+
+		[JsonPropertyName("large_capsule")]
+		public string ImagenGrande { get; set; }
+
+		[JsonPropertyName("current_price")]
+		public HumbleJuegoPrecio PrecioRebajado { get; set; }
+
+		[JsonPropertyName("full_price")]
+		public HumbleJuegoPrecio PrecioBase { get; set; }
+
+		[JsonPropertyName("human_url")]
+		public string Enlace { get; set; }
+
+		[JsonPropertyName("delivery_methods")]
+		public List<string> DRMs { get; set; }
+
+		[JsonPropertyName("platforms")]
+		public List<string> Sistemas { get; set; }
+
+		[JsonPropertyName("sale_end")]
+		public double FechaTermina { get; set; }
+
+		[JsonPropertyName("rewards_split")]
+		public double DescuentoChoice { get; set; }
+
+		[JsonPropertyName("incompatible_features")]
+		public List<string> CosasIncompatibles { get; set; }
+	}
+
+	public class HumbleJuegoPrecio
+	{
+		[JsonPropertyName("currency")]
+		public string Moneda { get; set; }
+
+		[JsonPropertyName("amount")]
+		public object Cantidad { get; set; }
 	}
 }

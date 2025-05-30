@@ -14,11 +14,9 @@ namespace Interfaz
             ObjetosVentana.nvItemSubirArriba.PointerEntered += Animaciones.EntraRatonNvItem2;
             ObjetosVentana.nvItemSubirArriba.PointerExited += Animaciones.SaleRatonNvItem2;
 
-            ObjetosVentana.svWeb.ViewChanging += svScroll;
             ObjetosVentana.svHumble.ViewChanging += svScroll;
 			ObjetosVentana.svRSS.ViewChanging += svScroll;
 			ObjetosVentana.svSteam.ViewChanging += svScroll;
-			ObjetosVentana.svReddit.ViewChanging += svScroll;
 			ObjetosVentana.svOpciones.ViewChanging += svScroll;
 		}
 
@@ -44,11 +42,7 @@ namespace Interfaz
             Grid grid = nvItem.Content as Grid;
             grid.Background = new SolidColorBrush(Colors.Transparent);
 
-            if (ObjetosVentana.gridWeb.Visibility == Visibility.Visible)
-            {
-                ObjetosVentana.svWeb.ChangeView(null, 0, null);
-            }
-            else if (ObjetosVentana.gridHumble.Visibility == Visibility.Visible)
+            if (ObjetosVentana.gridHumble.Visibility == Visibility.Visible)
             {
                 ObjetosVentana.svHumble.ChangeView(null, 0, null);
             }
@@ -59,10 +53,6 @@ namespace Interfaz
 			else if (ObjetosVentana.gridSteam.Visibility == Visibility.Visible)
 			{
 				ObjetosVentana.svSteam.ChangeView(null, 0, null);
-			}
-			else if (ObjetosVentana.gridReddit.Visibility == Visibility.Visible)
-			{
-				ObjetosVentana.svReddit.ChangeView(null, 0, null);
 			}
 			else if (ObjetosVentana.gridOpciones.Visibility == Visibility.Visible)
             {

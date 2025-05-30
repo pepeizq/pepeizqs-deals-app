@@ -19,12 +19,10 @@ namespace pepeizqs_deals_app
 			Pestañas.Cargar();
 			ScrollViewers.Cargar();
 
-			Web.Cargar();
 			Humble.Cargar();
 			Steam.Cargar();
-			Reddit.Cargar();
 
-			Pestañas.Visibilidad(gridWeb, true, null, false);
+			Pestañas.Visibilidad(gridHumble, true, null, false);
 		}
 
 		public void CargarObjetosVentana()
@@ -40,18 +38,11 @@ namespace pepeizqs_deals_app
 
 			//-----------------------------------------------------------------
 
-			ObjetosVentana.gridWeb = gridWeb;
-			ObjetosVentana.svWeb = svWeb;
-			ObjetosVentana.wvWeb = wvWeb;
-
-			//-----------------------------------------------------------------
-
 			ObjetosVentana.gridHumble = gridHumble;
 			ObjetosVentana.svHumble = svHumble;
 			ObjetosVentana.botonHumbleArrancar = botonHumbleArrancar;
 			ObjetosVentana.tbHumblePaginas = tbHumblePaginas;
 			ObjetosVentana.wvHumbleAPI = wvHumbleAPI;
-			ObjetosVentana.wvHumbleWeb = wvHumbleWeb;
 
 			//-----------------------------------------------------------------
 
@@ -66,15 +57,6 @@ namespace pepeizqs_deals_app
 			ObjetosVentana.svSteam = svSteam;
 			ObjetosVentana.tbSteamEnlace = tbSteamEnlace;
 			ObjetosVentana.wvSteam = wvSteam;
-
-			//-----------------------------------------------------------------
-
-			ObjetosVentana.gridReddit = gridReddit;
-			ObjetosVentana.svReddit = svReddit;
-			ObjetosVentana.botonRedditArrancar = botonRedditArrancar;
-			ObjetosVentana.botonRedditSumar = botonRedditSumar;
-			ObjetosVentana.tbRedditEnlace = tbRedditEnlace;
-			ObjetosVentana.wvReddit = wvReddit;
 
 			//-----------------------------------------------------------------
 
@@ -95,18 +77,11 @@ namespace pepeizqs_deals_app
 
 			//-----------------------------------------------------------------
 
-			public static Grid gridWeb { get; set; }
-			public static ScrollViewer svWeb { get; set; }
-			public static WebView2 wvWeb { get; set; }
-
-			//-----------------------------------------------------------------
-
 			public static Grid gridHumble { get; set; }
 			public static ScrollViewer svHumble { get; set; }
 			public static Button botonHumbleArrancar { get; set; }
 			public static TextBlock tbHumblePaginas { get; set; }
             public static WebView2 wvHumbleAPI { get; set; }
-			public static WebView2 wvHumbleWeb { get; set; }
 
 			//-----------------------------------------------------------------
 
@@ -124,26 +99,15 @@ namespace pepeizqs_deals_app
 
 			//-----------------------------------------------------------------
 
-			public static Grid gridReddit { get; set; }
-			public static ScrollViewer svReddit { get; set; }
-			public static Button botonRedditArrancar { get; set; }
-			public static Button botonRedditSumar { get; set; }
-			public static TextBox tbRedditEnlace { get; set; }
-			public static WebView2 wvReddit { get; set; }
-
-			//-----------------------------------------------------------------
-
 			public static Grid gridOpciones { get; set; }
 			public static ScrollViewer svOpciones { get; set; }
 		}
 
 		private void nvPrincipal_Loaded(object sender, RoutedEventArgs e)
 		{
-			Pestañas.CreadorItems("Reddit");
 			Pestañas.CreadorItems("Steam");
 			Pestañas.CreadorItems("RSS");
 			Pestañas.CreadorItems("Humble");
-			Pestañas.CreadorItems("Web");
 		}
 
 		private void nvPrincipal_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
@@ -177,12 +141,7 @@ namespace pepeizqs_deals_app
 						{
 							TextBlock tb = sp.Children[0] as TextBlock;
 
-							if (tb.Text == "Web")
-							{
-								Web.Cargar();
-								Pestañas.Visibilidad(gridWeb, true, null, false);
-							}
-							else if (tb.Text == "Humble")
+							if (tb.Text == "Humble")
 							{
 								Pestañas.Visibilidad(gridHumble, true, null, false);
 							}
@@ -194,10 +153,6 @@ namespace pepeizqs_deals_app
 							else if (tb.Text == "Steam")
 							{
 								Pestañas.Visibilidad(gridSteam, true, null, false);
-							}
-							else if (tb.Text == "Reddit")
-							{
-								Pestañas.Visibilidad(gridReddit, true, null, false);
 							}
 						}
 					}
