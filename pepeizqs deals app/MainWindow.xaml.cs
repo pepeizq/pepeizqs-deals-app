@@ -20,6 +20,7 @@ namespace pepeizqs_deals_app
 			ScrollViewers.Cargar();
 
 			Humble.Cargar();
+			Epic.Cargar();
 			Steam.Cargar();
 
 			Pestañas.Visibilidad(gridHumble, true, null, false);
@@ -46,9 +47,16 @@ namespace pepeizqs_deals_app
 
 			//-----------------------------------------------------------------
 
+			ObjetosVentana.gridEpic = gridEpic;
+			ObjetosVentana.svEpic = svEpic;
+			ObjetosVentana.botonEpicArrancar = botonEpicArrancar;
+			ObjetosVentana.tbEpicPaginas = tbEpicPaginas;
+			ObjetosVentana.wvEpicAPI = wvEpicAPI;
+
+			//-----------------------------------------------------------------
+
 			ObjetosVentana.gridRSS = gridRSS;
 			ObjetosVentana.svRSS = svRSS;
-            ObjetosVentana.wvRSS = wvRSS;
             ObjetosVentana.spRSSNoticias = spRSSNoticias;
 
 			//-----------------------------------------------------------------
@@ -85,9 +93,16 @@ namespace pepeizqs_deals_app
 
 			//-----------------------------------------------------------------
 
+			public static Grid gridEpic { get; set; }
+			public static ScrollViewer svEpic { get; set; }
+			public static Button botonEpicArrancar { get; set; }
+			public static TextBlock tbEpicPaginas { get; set; }
+			public static WebView2 wvEpicAPI { get; set; }
+
+			//-----------------------------------------------------------------
+
 			public static Grid gridRSS { get; set; }
 			public static ScrollViewer svRSS { get; set; }
-            public static WebView2 wvRSS { get; set; }
             public static StackPanel spRSSNoticias { get; set; }
 
 			//-----------------------------------------------------------------
@@ -107,6 +122,7 @@ namespace pepeizqs_deals_app
 		{
 			Pestañas.CreadorItems("Steam");
 			Pestañas.CreadorItems("RSS");
+			Pestañas.CreadorItems("Epic Games");
 			Pestañas.CreadorItems("Humble");
 		}
 
@@ -144,6 +160,10 @@ namespace pepeizqs_deals_app
 							if (tb.Text == "Humble")
 							{
 								Pestañas.Visibilidad(gridHumble, true, null, false);
+							}
+							else if (tb.Text == "Epic Games")
+							{
+								Pestañas.Visibilidad(gridEpic, true, null, false);
 							}
 							else if (tb.Text == "RSS")
 							{

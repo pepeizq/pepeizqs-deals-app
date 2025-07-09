@@ -15,6 +15,7 @@ namespace Interfaz
             ObjetosVentana.nvItemSubirArriba.PointerExited += Animaciones.SaleRatonNvItem2;
 
             ObjetosVentana.svHumble.ViewChanging += svScroll;
+			ObjetosVentana.svEpic.ViewChanging += svScroll;
 			ObjetosVentana.svRSS.ViewChanging += svScroll;
 			ObjetosVentana.svSteam.ViewChanging += svScroll;
 			ObjetosVentana.svOpciones.ViewChanging += svScroll;
@@ -46,15 +47,19 @@ namespace Interfaz
             {
                 ObjetosVentana.svHumble.ChangeView(null, 0, null);
             }
-            else if (ObjetosVentana.gridRSS.Visibility == Visibility.Visible)
+            else if (ObjetosVentana.gridEpic.Visibility == Visibility.Visible)
+			{
+				ObjetosVentana.svEpic.ChangeView(null, 0, null);
+			}
+			else if (ObjetosVentana.gridRSS.Visibility == Visibility.Visible)
             {
                 ObjetosVentana.svRSS.ChangeView(null, 0, null);
             }
-			else if (ObjetosVentana.gridSteam.Visibility == Visibility.Visible)
-			{
-				ObjetosVentana.svSteam.ChangeView(null, 0, null);
-			}
-			else if (ObjetosVentana.gridOpciones.Visibility == Visibility.Visible)
+            else if (ObjetosVentana.gridSteam.Visibility == Visibility.Visible)
+            {
+                ObjetosVentana.svSteam.ChangeView(null, 0, null);
+            }
+            else if (ObjetosVentana.gridOpciones.Visibility == Visibility.Visible)
             {
                 ObjetosVentana.svOpciones.ChangeView(null, 0, null);
             }
