@@ -2,9 +2,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static pepeizqs_deals_app.MainWindow;
 

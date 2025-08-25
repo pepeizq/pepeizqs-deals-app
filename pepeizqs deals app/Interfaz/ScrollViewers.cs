@@ -16,6 +16,7 @@ namespace Interfaz
 
             ObjetosVentana.svHumble.ViewChanging += svScroll;
 			ObjetosVentana.svEpic.ViewChanging += svScroll;
+			ObjetosVentana.svAmazonLuna.ViewChanging += svScroll;
 			ObjetosVentana.svRSS.ViewChanging += svScroll;
 			ObjetosVentana.svSteam.ViewChanging += svScroll;
 			ObjetosVentana.svOpciones.ViewChanging += svScroll;
@@ -50,6 +51,10 @@ namespace Interfaz
             else if (ObjetosVentana.gridEpic.Visibility == Visibility.Visible)
 			{
 				ObjetosVentana.svEpic.ChangeView(null, 0, null);
+			}
+			else if (ObjetosVentana.gridAmazonLuna.Visibility == Visibility.Visible)
+			{
+				ObjetosVentana.svAmazonLuna.ChangeView(null, 0, null);
 			}
 			else if (ObjetosVentana.gridRSS.Visibility == Visibility.Visible)
             {

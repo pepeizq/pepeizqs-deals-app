@@ -21,6 +21,7 @@ namespace pepeizqs_deals_app
 
 			Humble.Cargar();
 			Epic.Cargar();
+			AmazonLuna.Cargar();
 			Steam.Cargar();
 
 			Pestañas.Visibilidad(gridHumble, true, null, false);
@@ -52,6 +53,14 @@ namespace pepeizqs_deals_app
 			ObjetosVentana.botonEpicArrancar = botonEpicArrancar;
 			ObjetosVentana.tbEpicPaginas = tbEpicPaginas;
 			ObjetosVentana.wvEpicAPI = wvEpicAPI;
+
+			//-----------------------------------------------------------------
+
+			ObjetosVentana.gridAmazonLuna = gridAmazonLuna;
+			ObjetosVentana.svAmazonLuna = svAmazonLuna;
+			ObjetosVentana.botonAmazonLunaArrancar = botonAmazonLunaArrancar;
+			ObjetosVentana.tbAmazonLuna = tbAmazonLuna;
+			ObjetosVentana.wvAmazonLuna = wvAmazonLuna;
 
 			//-----------------------------------------------------------------
 
@@ -101,6 +110,14 @@ namespace pepeizqs_deals_app
 
 			//-----------------------------------------------------------------
 
+			public static Grid gridAmazonLuna { get; set; }
+			public static ScrollViewer svAmazonLuna { get; set; }
+			public static Button botonAmazonLunaArrancar { get; set; }
+			public static TextBlock tbAmazonLuna { get; set; }
+			public static WebView2 wvAmazonLuna { get; set; }
+
+			//-----------------------------------------------------------------
+
 			public static Grid gridRSS { get; set; }
 			public static ScrollViewer svRSS { get; set; }
             public static StackPanel spRSSNoticias { get; set; }
@@ -122,6 +139,7 @@ namespace pepeizqs_deals_app
 		{
 			Pestañas.CreadorItems("Steam");
 			Pestañas.CreadorItems("RSS");
+			Pestañas.CreadorItems("Amazon Luna");
 			Pestañas.CreadorItems("Epic Games");
 			Pestañas.CreadorItems("Humble");
 		}
@@ -164,6 +182,10 @@ namespace pepeizqs_deals_app
 							else if (tb.Text == "Epic Games")
 							{
 								Pestañas.Visibilidad(gridEpic, true, null, false);
+							}
+							else if (tb.Text == "Amazon Luna")
+							{
+								Pestañas.Visibilidad(gridAmazonLuna, true, null, false);
 							}
 							else if (tb.Text == "RSS")
 							{
