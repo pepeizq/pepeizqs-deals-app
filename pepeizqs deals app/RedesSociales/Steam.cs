@@ -138,6 +138,7 @@ namespace RedesSociales
 			contenido = contenido.Replace(Strings.ChrW(34) + " target=" + Strings.ChrW(34) + "_blank" + Strings.ChrW(34) + ">", "]");
 			contenido = contenido.Replace("<div>", null);
 			contenido = contenido.Replace("<div style=" + Strings.ChrW(34) + "margin-top: 20px;" + Strings.ChrW(34) + ">", Environment.NewLine + Environment.NewLine);
+			contenido = contenido.Replace("<div style=" + Strings.ChrW(34) + "margin-bottom: 15px;" + Strings.ChrW(34) + ">", null);
 			contenido = contenido.Replace("</div>", null);
 			contenido = contenido.Replace("<ul>", "[list]");
 			contenido = contenido.Replace("</ul>", "[/list]");

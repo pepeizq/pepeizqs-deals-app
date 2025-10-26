@@ -1,4 +1,5 @@
-﻿using Interfaz;
+﻿using Herramientas;
+using Interfaz;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.VisualBasic;
@@ -26,16 +27,16 @@ namespace Modulos
 
 		private static void ArrancarClick(object sender, RoutedEventArgs e)
 		{
-			ObjetosVentana.wvAmazonLuna.Source = new Uri("https://luna.amazon.es/subscription/luna-plus/B085TRCCT6");
+			ObjetosVentana.wvAmazonLuna.Source = new Uri("https://luna.amazon.es/subscription/luna-standard");
 		}
 
 		private static async void CompletarCarga(object sender, object e)
 		{
 			WebView2 wv = (WebView2)sender;
 
-			if (wv.Source.AbsoluteUri.Contains("https://luna.amazon.es/subscription/luna-plus/B085TRCCT6") == true)
+			if (wv.Source.AbsoluteUri.Contains("https://luna.amazon.es/subscription/luna-standard") == true)
 			{
-				await Task.Delay(3000);
+				await Task.Delay(5000);
 
 				html = await wv.ExecuteScriptAsync("document.documentElement.outerHTML");
 
@@ -43,9 +44,9 @@ namespace Modulos
 				{
 					html = System.Text.RegularExpressions.Regex.Unescape(html);
 
-					if (html.Contains(Strings.ChrW(34) + "collection_channel_games_lunaplus" + Strings.ChrW(34)) == true)
+					if (html.Contains(Strings.ChrW(34) + "collection_browse_channel_games_impression" + Strings.ChrW(34)) == true)
 					{
-						html = html.Substring(html.IndexOf(Strings.ChrW(34) + "collection_channel_games_lunaplus" + Strings.ChrW(34)));
+						html = html.Substring(html.IndexOf(Strings.ChrW(34) + "collection_browse_channel_games_impression" + Strings.ChrW(34)));
 					}
 
 					List<AmazonLunaJuego> juegos = new List<AmazonLunaJuego>();
@@ -65,6 +66,97 @@ namespace Modulos
 
 							if (temp2.Contains("_impression") == false)
 							{
+								temp2 = temp2.Replace("game_tile_", null);
+
+								int int3 = temp1.IndexOf("title=" + Strings.ChrW(34));
+								string temp3 = temp1.Remove(0, int3 + 7);
+
+								int int4 = temp3.IndexOf(Strings.ChrW(34));
+								string temp4 = temp3.Remove(int4, temp3.Length - int4);
+
+								AmazonLunaJuego juego = new AmazonLunaJuego
+								{
+									Id = temp2,
+									Nombre = temp4
+								};
+
+								juegos.Add(juego);
+							}
+
+						}
+
+						i += 1;
+					}
+
+					using (SqlConnection conexion = new SqlConnection(DatosPersonales.Servidor))
+					{
+						conexion.Open();
+
+						if (conexion.State == System.Data.ConnectionState.Open)
+						{
+							string sqlAñadir = "INSERT INTO temporallunastandardjson " +
+										"(contenido, fecha, enlace) VALUES " +
+										"(@contenido, @fecha, @enlace) ";
+
+							using (SqlCommand comando = new SqlCommand(sqlAñadir, conexion))
+							{
+								comando.Parameters.AddWithValue("@contenido", JsonSerializer.Serialize(juegos));
+								comando.Parameters.AddWithValue("@fecha", DateTime.Now);
+								comando.Parameters.AddWithValue("@enlace", "1");
+
+								try
+								{
+									comando.ExecuteNonQuery();
+								}
+								catch (Exception ex)
+								{
+									Notificaciones.Toast("Error al guardar los juegos de Amazon Luna Standard: " + ex.Message);
+								}
+							}
+						}
+					}
+
+					ObjetosVentana.tbAmazonLuna.Text = ObjetosVentana.tbAmazonLuna.Text + juegos.Count.ToString() + " juegos (standard) ";
+				}
+
+				await Task.Delay(5000);
+
+				wv.Source = new Uri("https://luna.amazon.es/subscription/luna-premium/B085TRCCT6");
+			}
+			else if (wv.Source.AbsoluteUri.Contains("https://luna.amazon.es/subscription/luna-premium/B085TRCCT6") == true)
+			{
+				await Task.Delay(5000);
+
+				html = await wv.ExecuteScriptAsync("document.documentElement.outerHTML");
+
+				if (string.IsNullOrEmpty(html) == false)
+				{
+					html = System.Text.RegularExpressions.Regex.Unescape(html);
+
+					if (html.Contains(Strings.ChrW(34) + "collection_browse_channel_games_impression" + Strings.ChrW(34)) == true)
+					{
+						html = html.Substring(html.IndexOf(Strings.ChrW(34) + "collection_browse_channel_games_impression" + Strings.ChrW(34)));
+					}
+
+					List<AmazonLunaJuego> juegos = new List<AmazonLunaJuego>();
+
+					int i = 0;
+					while (i < 1000)
+					{
+						if (html.Contains("id=" + Strings.ChrW(34) + "game_tile_amzn1.adg.product.") == true)
+						{
+							int int1 = html.IndexOf("id=" + Strings.ChrW(34) + "game_tile_amzn1.adg.product.");
+							string temp1 = html.Remove(0, int1 + 4);
+
+							html = html.Remove(0, int1 + 4);
+
+							int int2 = temp1.IndexOf(Strings.ChrW(34));
+							string temp2 = temp1.Remove(int2, temp1.Length - int2);
+
+							if (temp2.Contains("_impression") == false)
+							{
+								temp2 = temp2.Replace("game_tile_", null);
+
 								int int3 = temp1.IndexOf("title=" + Strings.ChrW(34));
 								string temp3 = temp1.Remove(0, int3 + 7);
 
@@ -91,7 +183,7 @@ namespace Modulos
 
 						if (conexion.State == System.Data.ConnectionState.Open)
 						{
-							string sqlAñadir = "INSERT INTO temporalamazonluna " +
+							string sqlAñadir = "INSERT INTO temporallunapremiumjson " +
 										"(contenido, fecha, enlace) VALUES " +
 										"(@contenido, @fecha, @enlace) ";
 
@@ -113,7 +205,7 @@ namespace Modulos
 						}
 					}
 
-					ObjetosVentana.tbAmazonLuna.Text = "Cargados " + juegos.Count.ToString() + " juegos";
+					ObjetosVentana.tbAmazonLuna.Text = ObjetosVentana.tbAmazonLuna.Text + juegos.Count.ToString() + " juegos (premium) ";
 				}
 			}
 		}
