@@ -86,7 +86,7 @@ namespace Modulos
 				}
 				else 
 				{
-					await Task.Delay(azar.Next(2000, 10000));
+					await Task.Delay(azar.Next(5000, 10000));
 				}
 
 				if (pagina < numPaginas)
