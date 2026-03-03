@@ -13,7 +13,7 @@ namespace RedesSociales
     {
         public static void Cargar()
         {
-            ObjetosVentana.wvSteam.Source = new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create");
+            ObjetosVentana.wvSteam.Source = new Uri("https://steamcommunity.com/groups/pepedeals/announcements/create");
 
 			ObjetosVentana.wvSteam.NavigationCompleted += CompletarCarga;
 		}
@@ -27,11 +27,11 @@ namespace RedesSociales
             if (wv.CoreWebView2.DocumentTitle == "Steam Community :: Error")
             {
 				await Task.Delay(15000);
-				wv.Source = new Uri("https://steamcommunity.com/login/home/?goto=groups%2Fpepeizqdeals%2Fannouncements%2Fcreate");
+				wv.Source = new Uri("https://steamcommunity.com/login/home/?goto=groups%2Fpepedeals%2Fannouncements%2Fcreate");
             }
             else
             {
-				if (wv.Source.AbsoluteUri.Contains("https://steamcommunity.com/login/home/?goto=groups%2Fpepeizqdeals%2Fannouncements%2Fcreate") == true)
+				if (wv.Source.AbsoluteUri.Contains("https://steamcommunity.com/login/home/?goto=groups%2Fpepedeals%2Fannouncements%2Fcreate") == true)
 				{
 					await Task.Delay(5000);
 					await wv.ExecuteScriptAsync("document.getElementsByClassName('newlogindialog_TextInput_2eKVn')[0].value = '" + DatosPersonales.SteamLogin + "'");
@@ -44,10 +44,10 @@ namespace RedesSociales
 				}
 				else
 				{
-					if (wv.Source != new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create"))
+					if (wv.Source != new Uri("https://steamcommunity.com/groups/pepedeals/announcements/create"))
 					{
 						await Task.Delay(5000);
-						wv.Source = new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create");
+						wv.Source = new Uri("https://steamcommunity.com/groups/pepedeals/announcements/create");
 					}					
 				}
 			}           
@@ -57,7 +57,7 @@ namespace RedesSociales
 		{
 			WebView2 wv = ObjetosVentana.wvSteam;
 
-			if (wv.Source.AbsoluteUri == "https://steamcommunity.com/groups/pepeizqdeals/announcements/create")
+			if (wv.Source.AbsoluteUri == "https://steamcommunity.com/groups/pepedeals/announcements/create")
 			{
 				await Task.Delay(1000);
 				await wv.ExecuteScriptAsync("document.getElementById('headline').focus();");
@@ -67,7 +67,7 @@ namespace RedesSociales
 				await wv.ExecuteScriptAsync("document.getElementById('body').focus();");
 
 				await Task.Delay(1000);
-				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido("https://pepeizqdeals.com/news/" + noticia.Id.ToString() + "/", noticia.ContenidoEn, WebUtility.HtmlDecode(noticia.Imagen))) + "'");
+				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido("https://pepe.deals/news/" + noticia.Id.ToString() + "/", noticia.ContenidoEn, WebUtility.HtmlDecode(noticia.Imagen))) + "'");
 
 				await Task.Delay(1000);
 
@@ -91,11 +91,11 @@ namespace RedesSociales
 
 				await Task.Delay(10000);
 
-				wv.Source = new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create");
+				wv.Source = new Uri("https://steamcommunity.com/groups/pepedeals/announcements/create");
 			}
 			else
 			{
-				wv.Source = new Uri("https://steamcommunity.com/groups/pepeizqdeals/announcements/create");
+				wv.Source = new Uri("https://steamcommunity.com/groups/pepedeals/announcements/create");
 			}
 		}
 

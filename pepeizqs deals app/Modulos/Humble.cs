@@ -1,9 +1,12 @@
-﻿using Interfaz;
+﻿using ColorCode.Compilation.Languages;
+using Dapper;
+using Interfaz;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -109,38 +112,30 @@ namespace Modulos
 							}
 							catch { }
 
-							if (juegos != null)
+							if (juegos?.Resultados?.Count > 0)
 							{
-								if (juegos.Resultados?.Count > 0)
+								using (SqlConnection conexion = new SqlConnection(DatosPersonales.Servidor))
 								{
-									using (SqlConnection conexion = new SqlConnection(DatosPersonales.Servidor))
+									conexion.Open();
+
+									if (conexion.State == System.Data.ConnectionState.Open)
 									{
-										conexion.Open();
+										string sqlAñadir = "INSERT INTO temporalhumble " +
+													"(contenido, fecha, enlace) VALUES " +
+													"(@contenido, @fecha, @enlace) ";
 
-										if (conexion.State == System.Data.ConnectionState.Open)
+										try
 										{
-											foreach (HumbleJuego juego in juegos.Resultados)
+											await conexion.ExecuteAsync(sqlAñadir, new
 											{
-												string sqlAñadir = "INSERT INTO temporalhumble " +
-														"(contenido, fecha, enlace) VALUES " +
-														"(@contenido, @fecha, @enlace) ";
+												contenido = html,
+												fecha = DateTime.Now,
+												enlace = pagina
+											});
+										}
+										catch
+										{
 
-												using (SqlCommand comando = new SqlCommand(sqlAñadir, conexion))
-												{
-													comando.Parameters.AddWithValue("@contenido", JsonSerializer.Serialize(juego));
-													comando.Parameters.AddWithValue("@fecha", DateTime.Now);
-													comando.Parameters.AddWithValue("@enlace", juego.Enlace);
-
-													try
-													{
-														comando.ExecuteNonQuery();
-													}
-													catch
-													{
-
-													}
-												}
-											}
 										}
 									}
 								}
