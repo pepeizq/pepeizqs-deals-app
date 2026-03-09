@@ -1,20 +1,19 @@
 ﻿using Microsoft.UI.Xaml.Controls;
-using Microsoft.VisualBasic;
+using Microsoft.Web.WebView2.Core;
 using Modulos;
 using System;
-using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using static pepeizqs_deals_app.MainWindow;
 
 namespace RedesSociales
 {
     public static class Steam
     {
+		public static Noticia noticia { get; set; }
+
         public static void Cargar()
         {
-            ObjetosVentana.wvSteam.Source = new Uri("https://steamcommunity.com/groups/pepedeals/announcements/create");
-
+			ObjetosVentana.wvSteam.CoreWebView2Initialized += InyectarDetectorUrl;
 			ObjetosVentana.wvSteam.NavigationCompleted += CompletarCarga;
 		}
 
@@ -22,137 +21,260 @@ namespace RedesSociales
         {
             WebView2 wv = (WebView2)sender;
 
-            ObjetosVentana.tbSteamEnlace.Text = wv.Source.AbsoluteUri;
+			ObjetosVentana.tbSteamEnlace.Text = wv.Source.AbsoluteUri;
 
-            if (wv.CoreWebView2.DocumentTitle == "Steam Community :: Error")
-            {
-				await Task.Delay(15000);
-				wv.Source = new Uri("https://steamcommunity.com/login/home/?goto=groups%2Fpepedeals%2Fannouncements%2Fcreate");
-            }
-            else
-            {
-				if (wv.Source.AbsoluteUri.Contains("https://steamcommunity.com/login/home/?goto=groups%2Fpepedeals%2Fannouncements%2Fcreate") == true)
-				{
-					await Task.Delay(5000);
-					await wv.ExecuteScriptAsync("document.getElementsByClassName('newlogindialog_TextInput_2eKVn')[0].value = '" + DatosPersonales.SteamLogin + "'");
-
-					await Task.Delay(2000);
-					await wv.ExecuteScriptAsync("document.getElementsByClassName('newlogindialog_TextInput_2eKVn')[1].value = '" + DatosPersonales.SteamContraseña + "'");
-
-					await Task.Delay(2000);
-					//await wv.ExecuteScriptAsync("document.getElementsByClassName('newlogindialog_LoginForm_3Tsg9')[0].submit();");
-				}
-				else
-				{
-					if (wv.Source != new Uri("https://steamcommunity.com/groups/pepedeals/announcements/create"))
-					{
-						await Task.Delay(5000);
-						wv.Source = new Uri("https://steamcommunity.com/groups/pepedeals/announcements/create");
-					}					
-				}
-			}           
-        }
-
-		public static async void Enviar(Noticia noticia)
-		{
-			WebView2 wv = ObjetosVentana.wvSteam;
-
-			if (wv.Source.AbsoluteUri == "https://steamcommunity.com/groups/pepedeals/announcements/create")
+			if (wv.Source == new Uri("https://steamcommunity.com/groups/pepedeals/partnerevents/create") && noticia != null)
 			{
-				await Task.Delay(1000);
-				await wv.ExecuteScriptAsync("document.getElementById('headline').focus();");
-				await wv.ExecuteScriptAsync("document.getElementById('headline').value = '" + HttpUtility.JavaScriptStringEncode(WebUtility.HtmlDecode(noticia.TituloEn)) + "'");
-
-				await Task.Delay(1000);
-				await wv.ExecuteScriptAsync("document.getElementById('body').focus();");
-
-				await Task.Delay(1000);
-				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido("https://pepe.deals/news/" + noticia.Id.ToString() + "/", noticia.ContenidoEn, WebUtility.HtmlDecode(noticia.Imagen))) + "'");
-
-				await Task.Delay(1000);
-
-				await wv.ExecuteScriptAsync("document.getElementById('language').focus();");
-				await wv.ExecuteScriptAsync("document.getElementById('language').selectedIndex = '5';");
-				await wv.ExecuteScriptAsync("document.getElementById('language').onchange();");
-
-				await Task.Delay(1000);
-
-				await wv.ExecuteScriptAsync("document.getElementById('headline').focus();");
-				await wv.ExecuteScriptAsync("document.getElementById('headline').value = '" + HttpUtility.JavaScriptStringEncode(WebUtility.HtmlDecode(noticia.TituloEs)) + "'");
-
-				await Task.Delay(1000);
-
-				await wv.ExecuteScriptAsync("document.getElementById('body').value = '" + HttpUtility.JavaScriptStringEncode(GenerarContenido("https://pepeizqdeals.com/news/" + noticia.Id.ToString() + "/", noticia.ContenidoEs, WebUtility.HtmlDecode(noticia.Imagen))) + "'");
-
-				await Task.Delay(1000);
-
-				await wv.ExecuteScriptAsync("document.getElementsByClassName('btn_green_white_innerfade btn_medium')[0].focus();");
-				await wv.ExecuteScriptAsync("document.getElementsByClassName('btn_green_white_innerfade btn_medium')[0].click();");
-
-				await Task.Delay(10000);
-
-				wv.Source = new Uri("https://steamcommunity.com/groups/pepedeals/announcements/create");
-			}
-			else
-			{
-				wv.Source = new Uri("https://steamcommunity.com/groups/pepedeals/announcements/create");
+				await Task.Delay(2000);
+				await wv.ExecuteScriptAsync(@"document.querySelector('._48mLX0pHw-bU9oIl-5dGm').click();");
 			}
 		}
 
-		private static string GenerarContenido(string enlace, string contenido2, string imagen)
+		public static  void Enviar(Noticia noticia2)
 		{
-			string contenido = "[url=" + enlace + "]Link[/url]" + Environment.NewLine + Environment.NewLine;
+			noticia = noticia2;
+			ObjetosVentana.wvSteam.Source = new Uri("https://steamcommunity.com/groups/pepedeals/partnerevents/create");
+		}
 
-			contenido = contenido + WebUtility.HtmlDecode(contenido2);
+		private static async void InyectarDetectorUrl(WebView2 sender, CoreWebView2InitializedEventArgs args)
+		{
+			await sender.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(@"
+				(function() {
+					const observer = (url) => {
+						window.chrome.webview.postMessage('URL_CHANGED:' + url);
+					};
 
-			int i = 0;
-			while (i < 1000)
+					const pushState = history.pushState.bind(history);
+					history.pushState = function(state, title, url) {
+						pushState(state, title, url);
+						observer(location.href);
+					};
+
+					const replaceState = history.replaceState.bind(history);
+					history.replaceState = function(state, title, url) {
+						replaceState(state, title, url);
+						observer(location.href);
+					};
+
+					window.addEventListener('popstate', () => observer(location.href));
+				})();
+			");
+
+			sender.CoreWebView2.WebMessageReceived += MensajeRecibido;
+		}
+
+		private static async void MensajeRecibido(object sender, CoreWebView2WebMessageReceivedEventArgs e)
+		{
+			string mensaje = e.TryGetWebMessageAsString();
+
+			if (mensaje.StartsWith("URL_CHANGED:"))
 			{
-				if (contenido.Contains("<img") == true)
+				string nuevaUrl = mensaje.Replace("URL_CHANGED:", "");
+				ObjetosVentana.tbSteamEnlace.Text = nuevaUrl;
+
+				WebView2 wv = ObjetosVentana.wvSteam;
+
+				if (nuevaUrl.Contains("/partnerevents/edit/"))
 				{
-					int int1 = contenido.IndexOf("<img");
-					string temp1 = contenido.Remove(0, int1);
+					await Task.Delay(2000);
 
-					int int2 = temp1.IndexOf(Strings.ChrW(34));
-					contenido = contenido.Remove(int1, int2 + 1);
+					#region Ingles
 
-					contenido = contenido.Insert(int1, "[img=");
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const select = document.querySelector('.tool-tip-source select');
+							const option = Array.from(select.options).find(o => o.text === 'English');
+							if (!option) return;
+							const setter = Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype, 'value').set;
+							setter.call(select, option.value);
+							select.dispatchEvent(new Event('change', { bubbles: true }));
+						})();
+					");
 
-					int int3 = contenido.IndexOf(Strings.ChrW(34));
-					string temp3 = contenido.Remove(0, int3);
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const input = document.querySelector('.ZAOXnBPqM-Jpp-1EVcR39');
+							if (!input) return;
+							const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+							setter.call(input, '" + noticia.SteamEn.Titulo + @"');
+							input.dispatchEvent(new Event('input', { bubbles: true }));
+							input.dispatchEvent(new Event('change', { bubbles: true }));
+						})();
+					");
 
-					int int4 = temp3.IndexOf(">");
-					contenido = contenido.Remove(int3, int4 + 1);
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const input = document.querySelector('._32XZf0gEFw0CwBBwiLjlEv');
+							if (!input) return;
+							const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+							setter.call(input, '" + noticia.SteamEn.Subtitulo + @"');
+							input.dispatchEvent(new Event('input', { bubbles: true }));
+							input.dispatchEvent(new Event('change', { bubbles: true }));
+						})();
+					");
 
-					contenido = contenido.Insert(int3, "]");
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const labels = Array.from(document.querySelectorAll('label'));
+							const label = labels.find(l => l.textContent.trim().includes('Use visual editor'));
+							if (!label) return;
+							const checkbox = label.querySelector('input[type=""checkbox""]');
+							if (!checkbox) return;
+
+							if (checkbox.checked) {
+								label.click(); // Clic sobre el label, como haría un usuario real
+							}
+						})();
+					");
+
+					await Task.Delay(100);
+					string contenidoEscapadoEn = System.Text.Json.JsonSerializer.Serialize(noticia.SteamEn.Contenido);
+
+					await wv.ExecuteScriptAsync($@"
+						(function() {{
+							const contenido = {contenidoEscapadoEn};
+							const textarea = document.querySelector('textarea[placeholder=""Enter Event Description here""]');
+							if (!textarea) return;
+
+							textarea.focus();
+
+							const setter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value').set;
+							setter.call(textarea, contenido);
+
+							textarea.dispatchEvent(new Event('focus', {{ bubbles: true }}));
+							textarea.dispatchEvent(new Event('input', {{ bubbles: true }}));
+							textarea.dispatchEvent(new Event('change', {{ bubbles: true }}));
+							textarea.dispatchEvent(new Event('blur', {{ bubbles: true }}));
+						}})();
+					");
+
+					#endregion
+
+					#region Español
+
+					await Task.Delay(3000);
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const select = document.querySelector('.tool-tip-source select');
+							if (!select) return;
+							const option = Array.from(select.options).find(o => o.text === 'Spanish - Spain');
+							if (!option) return;
+							const setter = Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype, 'value').set;
+							setter.call(select, option.value);
+							select.dispatchEvent(new Event('change', { bubbles: true }));
+						})();
+					");
+
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const input = document.querySelector('.ZAOXnBPqM-Jpp-1EVcR39');
+							if (!input) return;
+							const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+							setter.call(input, '" + noticia.SteamEs.Titulo + @"');
+							input.dispatchEvent(new Event('input', { bubbles: true }));
+							input.dispatchEvent(new Event('change', { bubbles: true }));
+						})();
+					");
+
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const input = document.querySelector('._32XZf0gEFw0CwBBwiLjlEv');
+							if (!input) return;
+							const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+							setter.call(input, '" + noticia.SteamEs.Subtitulo + @"');
+							input.dispatchEvent(new Event('input', { bubbles: true }));
+							input.dispatchEvent(new Event('change', { bubbles: true }));
+						})();
+					");
+
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const labels = Array.from(document.querySelectorAll('label'));
+							const label = labels.find(l => l.textContent.trim().includes('Use visual editor'));
+							if (!label) return;
+							const checkbox = label.querySelector('input[type=""checkbox""]');
+							if (!checkbox) return;
+
+							if (checkbox.checked) {
+								label.click(); // Clic sobre el label, como haría un usuario real
+							}
+						})();
+					");
+
+					await Task.Delay(100);
+					string contenidoEscapadoEs = System.Text.Json.JsonSerializer.Serialize(noticia.SteamEs.Contenido);
+
+					await wv.ExecuteScriptAsync($@"
+						(function() {{
+							const contenido = {contenidoEscapadoEs};
+							const textarea = document.querySelector('textarea[placeholder=""Enter Event Description here""]');
+							if (!textarea) return;
+
+							textarea.focus();
+
+							const setter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value').set;
+							setter.call(textarea, contenido);
+
+							textarea.dispatchEvent(new Event('focus', {{ bubbles: true }}));
+							textarea.dispatchEvent(new Event('input', {{ bubbles: true }}));
+							textarea.dispatchEvent(new Event('change', {{ bubbles: true }}));
+							textarea.dispatchEvent(new Event('blur', {{ bubbles: true }}));
+						}})();
+					");
+
+					#endregion
+
+					await Task.Delay(1000);
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const btn = Array.from(document.querySelectorAll('[role=""button""]'))
+								.find(b => b.textContent.trim().startsWith('Save'));
+							if (!btn) return;
+							btn.click();
+						})();
+					");
+
+					await Task.Delay(1000);
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const link = Array.from(document.querySelectorAll('a'))
+								.find(a => a.textContent.trim() === 'Preview Announcement');
+							if (!link) return;
+							link.click();
+						})();
+					");
+
+					await Task.Delay(1000);
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const link = Array.from(document.querySelectorAll('a'))
+								.find(a => a.textContent.trim() === 'Publish');
+							if (!link) return;
+							link.click();
+						})();
+					");
+
+					await Task.Delay(1000);
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const btn = Array.from(document.querySelectorAll('[role=""button""]'))
+								.find(b => b.textContent.trim().startsWith('Skip Warnings and Continue Publishing...'));
+							if (!btn) return;
+							btn.click();
+						})();
+					");
+
+					await Task.Delay(1000);
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const btn = Array.from(document.querySelectorAll('[role=""button""]'))
+								.find(b => b.textContent.trim().startsWith('Publish'));
+							if (!btn) return;
+							btn.click();
+						})();
+					");
 				}
-				else
-				{
-					break;
-				}
-
-				i += 1;
 			}
-
-			contenido = contenido.Replace("<a href=" + Strings.ChrW(34), "[url=");
-			contenido = contenido.Replace(Strings.ChrW(34) + " target=" + Strings.ChrW(34) + "_blank" + Strings.ChrW(34) + ">", "]");
-			contenido = contenido.Replace("<div>", null);
-			contenido = contenido.Replace("<div style=" + Strings.ChrW(34) + "margin-top: 20px;" + Strings.ChrW(34) + ">", Environment.NewLine + Environment.NewLine);
-			contenido = contenido.Replace("<div style=" + Strings.ChrW(34) + "margin-bottom: 15px;" + Strings.ChrW(34) + ">", null);
-			contenido = contenido.Replace("</div>", null);
-			contenido = contenido.Replace("<ul>", "[list]");
-			contenido = contenido.Replace("</ul>", "[/list]");
-			contenido = contenido.Replace("<li>", "[*]");
-			contenido = contenido.Replace("</li>", null);
-			contenido = contenido.Replace("</a>", "[/url]");
-			contenido = contenido.Replace("<br/>", Environment.NewLine);
-
-			if (imagen != null)
-			{
-				contenido = "[img=" + imagen + "]" + Environment.NewLine + Environment.NewLine + contenido;
-			}
-
-			return contenido;
 		}
 	}
 }

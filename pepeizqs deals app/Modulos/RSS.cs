@@ -6,13 +6,14 @@ using Microsoft.UI.Xaml.Media;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Text.Json;
 using static pepeizqs_deals_app.MainWindow;
 
 namespace Modulos
 {
 	public static class RSS
 	{
-		public static string dominio = "https://pepeizqdeals.com";
+		public static string dominio = "https://pepe.deals";
 
 		public static void Cargar()
 		{
@@ -95,6 +96,16 @@ namespace Modulos
 								if (lector.IsDBNull(13) == false)
 								{
 									noticia.ContenidoEs = lector.GetString(13);
+								}
+
+								if (lector.IsDBNull(18) == false)
+								{
+									noticia.SteamEn = JsonSerializer.Deserialize<NoticiaSteam>(lector.GetString(18));
+								}
+
+								if (lector.IsDBNull(19) == false)
+								{
+									noticia.SteamEs = JsonSerializer.Deserialize<NoticiaSteam>(lector.GetString(19));
 								}
 
 								noticias.Add(noticia);
@@ -243,5 +254,14 @@ namespace Modulos
 		public DateTime FechaEmpieza { get; set; }
 		public DateTime FechaTermina { get; set; }
 		public int BundleId { get; set; }
+		public NoticiaSteam SteamEn { get; set; }
+		public NoticiaSteam SteamEs { get; set; }
+	}
+
+	public class NoticiaSteam
+	{
+		public string Titulo { get; set; }
+		public string Subtitulo { get; set; }
+		public string Contenido { get; set; }
 	}
 }
