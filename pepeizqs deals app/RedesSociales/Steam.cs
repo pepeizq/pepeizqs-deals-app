@@ -23,17 +23,20 @@ namespace RedesSociales
 
 			ObjetosVentana.tbSteamEnlace.Text = wv.Source.AbsoluteUri;
 
-			if (wv.Source == new Uri("https://steamcommunity.com/groups/pepedeals/partnerevents/create") && noticia != null)
+			if (wv.Source == new Uri("https://steamcommunity.com/groups/pepedeals/partnerevents/create/"))
 			{
 				await Task.Delay(2000);
-				await wv.ExecuteScriptAsync(@"document.querySelector('._48mLX0pHw-bU9oIl-5dGm').click();");
+				await wv.ExecuteScriptAsync(@"
+					const img = document.querySelector('img[src*=""type_28.png""]');
+					if (img) img.closest('._1rJ2OUAMjHh_d8Wpp9FZeF').click();
+				");
 			}
 		}
 
-		public static  void Enviar(Noticia noticia2)
+		public static void Enviar(Noticia noticia2)
 		{
 			noticia = noticia2;
-			ObjetosVentana.wvSteam.Source = new Uri("https://steamcommunity.com/groups/pepedeals/partnerevents/create");
+			ObjetosVentana.wvSteam.Source = new Uri("https://steamcommunity.com/groups/pepedeals/partnerevents/create/");
 		}
 
 		private static async void InyectarDetectorUrl(WebView2 sender, CoreWebView2InitializedEventArgs args)
@@ -74,7 +77,7 @@ namespace RedesSociales
 
 				WebView2 wv = ObjetosVentana.wvSteam;
 
-				if (nuevaUrl.Contains("/partnerevents/edit/"))
+				if (nuevaUrl.Contains("/partnerevents/edit/") == true)
 				{
 					await Task.Delay(2000);
 
@@ -247,10 +250,10 @@ namespace RedesSociales
 					await Task.Delay(1000);
 					await wv.ExecuteScriptAsync(@"
 						(function() {
-							const link = Array.from(document.querySelectorAll('a'))
-								.find(a => a.textContent.trim() === 'Publish');
-							if (!link) return;
-							link.click();
+							const btn = Array.from(document.querySelectorAll('[role=""button""]'))
+								.find(b => b.textContent.trim().startsWith('Publish'));
+							if (!btn) return;
+							btn.click();
 						})();
 					");
 
