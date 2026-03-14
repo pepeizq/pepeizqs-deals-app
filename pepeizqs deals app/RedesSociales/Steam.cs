@@ -246,8 +246,10 @@ namespace RedesSociales
 							link.click();
 						})();
 					");
-
-					await Task.Delay(1000);
+				}
+				else if (nuevaUrl.Contains("/partnerevents/publish/") == true)
+				{
+					await Task.Delay(2000);
 					await wv.ExecuteScriptAsync(@"
 						(function() {
 							const btn = Array.from(document.querySelectorAll('[role=""button""]'))
