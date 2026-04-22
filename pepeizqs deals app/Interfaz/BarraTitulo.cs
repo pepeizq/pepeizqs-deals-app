@@ -30,16 +30,16 @@ namespace Interfaz
 
         public static void CambiarTitulo(string titulo)
         {
-            ObjetosVentana.ventana.Title = Package.Current.DisplayName;
-            ObjetosVentana.tbTitulo.Text = Package.Current.DisplayName + " (" + Package.Current.Id.Version.Major.ToString() + "." + Package.Current.Id.Version.Minor.ToString() + "." + Package.Current.Id.Version.Build.ToString() + "." + Package.Current.Id.Version.Revision.ToString() + ")";
+            //ObjetosVentana.ventana.Title = Package.Current.DisplayName;
+            //ObjetosVentana.tbTitulo.Text = Package.Current.DisplayName + " (" + Package.Current.Id.Version.Major.ToString() + "." + Package.Current.Id.Version.Minor.ToString() + "." + Package.Current.Id.Version.Build.ToString() + "." + Package.Current.Id.Version.Revision.ToString() + ")";
 
-            if (titulo != null)
-            {
-                if (titulo.Trim().Length > 0)
-                {
-                    ObjetosVentana.tbTitulo.Text = ObjetosVentana.tbTitulo.Text + " • " + titulo;
-                }              
-            }
+            //if (titulo != null)
+            //{
+            //    if (titulo.Trim().Length > 0)
+            //    {
+            //        ObjetosVentana.tbTitulo.Text = ObjetosVentana.tbTitulo.Text + " • " + titulo;
+            //    }              
+            //}
         }
     }
 }

@@ -21,7 +21,7 @@ namespace pepeizqs_deals_app
 
 			Humble.Cargar();
 			Epic.Cargar();
-			AmazonLuna.Cargar();
+			Scraping.Cargar();
 			Steam.Cargar();
 
 			Pestañas.Visibilidad(gridHumble, true, null, false);
@@ -139,7 +139,7 @@ namespace pepeizqs_deals_app
 		{
 			Pestañas.CreadorItems("Steam");
 			Pestañas.CreadorItems("RSS");
-			Pestañas.CreadorItems("Amazon Luna");
+			Pestañas.CreadorItems("Scraping");
 			Pestañas.CreadorItems("Epic Games");
 			Pestañas.CreadorItems("Humble");
 		}
@@ -183,7 +183,7 @@ namespace pepeizqs_deals_app
 							{
 								Pestañas.Visibilidad(gridEpic, true, null, false);
 							}
-							else if (tb.Text == "Amazon Luna")
+							else if (tb.Text == "Scraping")
 							{
 								Pestañas.Visibilidad(gridAmazonLuna, true, null, false);
 							}

@@ -1,11 +1,11 @@
 ﻿using FontAwesome6.Fonts;
 using Interfaz;
+using Microsoft.Data.SqlClient;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Text.Json;
 using static pepeizqs_deals_app.MainWindow;
 

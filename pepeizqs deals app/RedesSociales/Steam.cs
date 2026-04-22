@@ -86,7 +86,7 @@ namespace RedesSociales
 					await wv.ExecuteScriptAsync(@"
 						(function() {
 							const select = document.querySelector('.tool-tip-source select');
-							const option = Array.from(select.options).find(o => o.text === 'English');
+							const option = Array.from(select.options).find(o => o.text === 'Inglés');
 							if (!option) return;
 							const setter = Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype, 'value').set;
 							setter.call(select, option.value);
@@ -119,13 +119,13 @@ namespace RedesSociales
 					await wv.ExecuteScriptAsync(@"
 						(function() {
 							const labels = Array.from(document.querySelectorAll('label'));
-							const label = labels.find(l => l.textContent.trim().includes('Use visual editor'));
+							const label = labels.find(l => l.textContent.trim().includes('Usar editor visual'));
 							if (!label) return;
 							const checkbox = label.querySelector('input[type=""checkbox""]');
 							if (!checkbox) return;
 
 							if (checkbox.checked) {
-								label.click(); // Clic sobre el label, como haría un usuario real
+								label.click(); 
 							}
 						})();
 					");
@@ -136,7 +136,7 @@ namespace RedesSociales
 					await wv.ExecuteScriptAsync($@"
 						(function() {{
 							const contenido = {contenidoEscapadoEn};
-							const textarea = document.querySelector('textarea[placeholder=""Enter Event Description here""]');
+							const textarea = document.querySelector('textarea[placeholder=""Introduce la descripción del evento aquí""]');
 							if (!textarea) return;
 
 							textarea.focus();
@@ -160,7 +160,7 @@ namespace RedesSociales
 						(function() {
 							const select = document.querySelector('.tool-tip-source select');
 							if (!select) return;
-							const option = Array.from(select.options).find(o => o.text === 'Spanish - Spain');
+							const option = Array.from(select.options).find(o => o.text === 'Español de España');
 							if (!option) return;
 							const setter = Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype, 'value').set;
 							setter.call(select, option.value);
@@ -193,13 +193,13 @@ namespace RedesSociales
 					await wv.ExecuteScriptAsync(@"
 						(function() {
 							const labels = Array.from(document.querySelectorAll('label'));
-							const label = labels.find(l => l.textContent.trim().includes('Use visual editor'));
+							const label = labels.find(l => l.textContent.trim().includes('Usar editor visual'));
 							if (!label) return;
 							const checkbox = label.querySelector('input[type=""checkbox""]');
 							if (!checkbox) return;
 
 							if (checkbox.checked) {
-								label.click(); // Clic sobre el label, como haría un usuario real
+								label.click(); 
 							}
 						})();
 					");
@@ -210,7 +210,7 @@ namespace RedesSociales
 					await wv.ExecuteScriptAsync($@"
 						(function() {{
 							const contenido = {contenidoEscapadoEs};
-							const textarea = document.querySelector('textarea[placeholder=""Enter Event Description here""]');
+							const textarea = document.querySelector('textarea[placeholder=""Introduce la descripción del evento aquí""]');
 							if (!textarea) return;
 
 							textarea.focus();
@@ -231,7 +231,7 @@ namespace RedesSociales
 					await wv.ExecuteScriptAsync(@"
 						(function() {
 							const btn = Array.from(document.querySelectorAll('[role=""button""]'))
-								.find(b => b.textContent.trim().startsWith('Save'));
+								.find(b => b.textContent.trim().startsWith('Guardar'));
 							if (!btn) return;
 							btn.click();
 						})();
@@ -241,7 +241,7 @@ namespace RedesSociales
 					await wv.ExecuteScriptAsync(@"
 						(function() {
 							const link = Array.from(document.querySelectorAll('a'))
-								.find(a => a.textContent.trim() === 'Preview Announcement');
+								.find(a => a.textContent.trim() === 'Previsualizar anuncio');
 							if (!link) return;
 							link.click();
 						})();

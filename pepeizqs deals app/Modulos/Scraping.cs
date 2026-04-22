@@ -1,18 +1,20 @@
-﻿using Herramientas;
+﻿using Dapper;
+using Herramientas;
 using Interfaz;
+using Microsoft.Data.SqlClient;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static pepeizqs_deals_app.MainWindow;
 
 namespace Modulos
 {
-	public static class AmazonLuna
+	public static class Scraping
 	{
 		private static string html = string.Empty;
 
@@ -27,6 +29,7 @@ namespace Modulos
 
 		private static void ArrancarClick(object sender, RoutedEventArgs e)
 		{
+			ObjetosVentana.botonAmazonLunaArrancar.Visibility = Visibility.Collapsed;
 			ObjetosVentana.wvAmazonLuna.Source = new Uri("https://luna.amazon.es/subscription/luna-standard");
 		}
 
@@ -42,7 +45,7 @@ namespace Modulos
 
 				if (string.IsNullOrEmpty(html) == false)
 				{
-					html = System.Text.RegularExpressions.Regex.Unescape(html);
+					html = Regex.Unescape(html);
 
 					if (html.Contains(Strings.ChrW(34) + "collection_browse_channel_games_impression" + Strings.ChrW(34)) == true)
 					{
@@ -90,33 +93,27 @@ namespace Modulos
 
 					using (SqlConnection conexion = new SqlConnection(DatosPersonales.Servidor))
 					{
-						conexion.Open();
-
-						if (conexion.State == System.Data.ConnectionState.Open)
+						try
 						{
-							string sqlAñadir = "INSERT INTO temporallunastandardjson " +
-										"(contenido, fecha, enlace) VALUES " +
-										"(@contenido, @fecha, @enlace) ";
-
-							using (SqlCommand comando = new SqlCommand(sqlAñadir, conexion))
+							var parametros = new
 							{
-								comando.Parameters.AddWithValue("@contenido", JsonSerializer.Serialize(juegos));
-								comando.Parameters.AddWithValue("@fecha", DateTime.Now);
-								comando.Parameters.AddWithValue("@enlace", "1");
+								contenido = JsonSerializer.Serialize(juegos),
+								fecha = DateTime.Now,
+								enlace = "1"
+							};
 
-								try
-								{
-									comando.ExecuteNonQuery();
-								}
-								catch (Exception ex)
-								{
-									Notificaciones.Toast("Error al guardar los juegos de Amazon Luna Standard: " + ex.Message);
-								}
-							}
+							conexion.Execute(
+								"INSERT INTO temporallunastandardjson (contenido, fecha, enlace) VALUES (@contenido, @fecha, @enlace)",
+								parametros
+							);
+						}
+						catch (Exception ex)
+						{
+							Notificaciones.Toast("Error al guardar los juegos de Amazon Luna Standard: " + ex.Message);
 						}
 					}
 
-					ObjetosVentana.tbAmazonLuna.Text = ObjetosVentana.tbAmazonLuna.Text + juegos.Count.ToString() + " juegos (standard) ";
+					ObjetosVentana.tbAmazonLuna.Text = ObjetosVentana.tbAmazonLuna.Text + juegos.Count.ToString() + " juegos (Luna standard) ";
 				}
 
 				await Task.Delay(5000);
@@ -131,7 +128,7 @@ namespace Modulos
 
 				if (string.IsNullOrEmpty(html) == false)
 				{
-					html = System.Text.RegularExpressions.Regex.Unescape(html);
+					html = Regex.Unescape(html);
 
 					if (html.Contains(Strings.ChrW(34) + "collection_browse_channel_games_impression" + Strings.ChrW(34)) == true)
 					{
@@ -179,33 +176,113 @@ namespace Modulos
 
 					using (SqlConnection conexion = new SqlConnection(DatosPersonales.Servidor))
 					{
-						conexion.Open();
-
-						if (conexion.State == System.Data.ConnectionState.Open)
+						try
 						{
-							string sqlAñadir = "INSERT INTO temporallunapremiumjson " +
-										"(contenido, fecha, enlace) VALUES " +
-										"(@contenido, @fecha, @enlace) ";
-
-							using (SqlCommand comando = new SqlCommand(sqlAñadir, conexion))
-							{
-								comando.Parameters.AddWithValue("@contenido", JsonSerializer.Serialize(juegos));
-								comando.Parameters.AddWithValue("@fecha", DateTime.Now);
-								comando.Parameters.AddWithValue("@enlace", "1");
-
-								try
+							conexion.Execute(
+								"INSERT INTO temporallunapremiumjson (contenido, fecha, enlace) VALUES (@contenido, @fecha, @enlace)",
+								new
 								{
-									comando.ExecuteNonQuery();
+									contenido = JsonSerializer.Serialize(juegos),
+									fecha = DateTime.Now,
+									enlace = "1"
 								}
-								catch
-								{
-
-								}
-							}
+							);
+						}
+						catch
+						{
+							// Sin notificación de error
 						}
 					}
 
-					ObjetosVentana.tbAmazonLuna.Text = ObjetosVentana.tbAmazonLuna.Text + juegos.Count.ToString() + " juegos (premium) ";
+					ObjetosVentana.tbAmazonLuna.Text = ObjetosVentana.tbAmazonLuna.Text + juegos.Count.ToString() + " juegos (Luna premium) ";
+				}
+
+				await Task.Delay(5000);
+
+				wv.Source = new Uri("https://www.indiepass.com/es");
+			}
+			else if (wv.Source.AbsoluteUri.Contains("https://www.indiepass.com/es") == true)
+			{
+				await Task.Delay(5000);
+
+				html = await wv.ExecuteScriptAsync("document.documentElement.outerHTML");
+
+				if (string.IsNullOrEmpty(html) == false)
+				{
+					html = Regex.Unescape(html);
+
+					string key = "\\\"games\\\"";
+
+					int primero = html.IndexOf(key);
+
+					if (primero == -1)
+					{
+						return;
+					}
+
+					int segundo = html.IndexOf(key, primero + key.Length);
+
+					if (segundo == -1)
+					{
+						return;
+					}
+
+					int arranque = html.IndexOf('[', segundo);
+
+					if (arranque == -1)
+					{
+						return;
+					}
+
+					int nivel = 0;
+					int final = -1;
+
+					for (int i = arranque; i < html.Length; i++)
+					{
+						if (html[i] == '[') nivel++;
+						else if (html[i] == ']') nivel--;
+
+						if (nivel == 0)
+						{
+							final = i;
+							break;
+						}
+					}
+
+					if (final == -1)
+					{
+						return;
+					}
+
+					string json = html.Substring(arranque, final - arranque + 1);
+
+					json = json.Replace("\\\"", "\"");
+
+					var juegos = JsonSerializer.Deserialize<List<IndiePassJuego>>(json);
+
+					ObjetosVentana.tbAmazonLuna.Text = ObjetosVentana.tbAmazonLuna.Text + juegos.Count.ToString() + " juegos (Indie Pass) ";
+
+					using (SqlConnection conexion = new SqlConnection(DatosPersonales.Servidor))
+					{
+						try
+						{
+							conexion.Execute(
+								"INSERT INTO temporalindiepassjson (contenido, fecha, enlace) VALUES (@contenido, @fecha, @enlace)",
+								new
+								{
+									contenido = JsonSerializer.Serialize(juegos),
+									fecha = DateTime.Now,
+									enlace = "1"
+								}
+							);
+						}
+						catch
+						{
+							// Sin notificación de error
+						}
+					}
+
+					ObjetosVentana.botonAmazonLunaArrancar.Visibility = Visibility.Visible;
 				}
 			}
 		}
@@ -215,5 +292,11 @@ namespace Modulos
 	{
 		public string Id { get; set; }
 		public string Nombre { get; set; }
+	}
+
+	public class IndiePassJuego
+	{
+		public int id { get; set; }
+		public string title { get; set; }
 	}
 }
