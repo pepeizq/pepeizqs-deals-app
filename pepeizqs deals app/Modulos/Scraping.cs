@@ -83,9 +83,30 @@ namespace Modulos
 									Nombre = temp4
 								};
 
-								juegos.Add(juego);
-							}
+								if (string.IsNullOrEmpty(juego.Id) == false)
+								{
+									juego.Id = juego.Id.Replace("_imageUrl", null);
+								}
 
+								bool añadir = true;
+
+								if (juegos?.Count > 0)
+								{
+									foreach (AmazonLunaJuego juego2 in juegos)
+									{
+										if (juego2.Id == juego.Id)
+										{
+											añadir = false;
+											break;
+										}
+									}
+								}
+
+								if (añadir == true)
+								{
+									juegos.Add(juego);
+								}
+							}
 						}
 
 						i += 1;
@@ -166,9 +187,30 @@ namespace Modulos
 									Nombre = temp4
 								};
 
-								juegos.Add(juego);
+								if (string.IsNullOrEmpty(juego.Id) == false)
+								{
+									juego.Id = juego.Id.Replace("_imageUrl", null);
+								}
+
+								bool añadir = true;
+
+								if (juegos?.Count > 0)
+								{
+									foreach (AmazonLunaJuego juego2 in juegos)
+									{
+										if (juego2.Id == juego.Id)
+										{
+											añadir = false;
+											break;
+										}
+									}
+								}
+
+								if (añadir == true)
+								{
+									juegos.Add(juego);
+								}
 							}
-							
 						}
 
 						i += 1;

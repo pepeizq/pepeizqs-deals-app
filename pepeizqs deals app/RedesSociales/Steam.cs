@@ -247,13 +247,25 @@ namespace RedesSociales
 						})();
 					");
 				}
+				else if (nuevaUrl.Contains("/partnerevents/preview/") == true)
+				{
+					await Task.Delay(2000);
+					await wv.ExecuteScriptAsync(@"
+						(function() {
+							const link = Array.from(document.querySelectorAll('a'))
+								.find(a => a.textContent.trim() === 'Publicar');
+							if (!link) return;
+							link.click();
+						})();
+					");
+				}
 				else if (nuevaUrl.Contains("/partnerevents/publish/") == true)
 				{
 					await Task.Delay(2000);
 					await wv.ExecuteScriptAsync(@"
 						(function() {
 							const btn = Array.from(document.querySelectorAll('[role=""button""]'))
-								.find(b => b.textContent.trim().startsWith('Publish'));
+								.find(b => b.textContent.trim().startsWith('Publicar'));
 							if (!btn) return;
 							btn.click();
 						})();
