@@ -241,9 +241,9 @@ namespace Modulos
 
 				await Task.Delay(5000);
 
-				wv.Source = new Uri("https://www.indiepass.com/es");
+				wv.Source = new Uri("https://www.indiepass.com");
 			}
-			else if (wv.Source.AbsoluteUri.Contains("https://www.indiepass.com/es") == true)
+			else if (wv.Source.AbsoluteUri.Contains("https://www.indiepass.com") == true)
 			{
 				await Task.Delay(5000);
 
