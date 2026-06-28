@@ -99,7 +99,7 @@ namespace RedesSociales
 							const input = document.querySelector('.ZAOXnBPqM-Jpp-1EVcR39');
 							if (!input) return;
 							const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
-							setter.call(input, '" + noticia.SteamEn.Titulo + @"');
+							setter.call(input, '" + noticia.SteamEn.Titulo.Replace("'", null) + @"');
 							input.dispatchEvent(new Event('input', { bubbles: true }));
 							input.dispatchEvent(new Event('change', { bubbles: true }));
 						})();
@@ -110,7 +110,7 @@ namespace RedesSociales
 							const input = document.querySelector('._32XZf0gEFw0CwBBwiLjlEv');
 							if (!input) return;
 							const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
-							setter.call(input, '" + noticia.SteamEn.Subtitulo + @"');
+							setter.call(input, '" + noticia.SteamEn.Subtitulo.Replace("'", null) + @"');
 							input.dispatchEvent(new Event('input', { bubbles: true }));
 							input.dispatchEvent(new Event('change', { bubbles: true }));
 						})();
@@ -173,7 +173,7 @@ namespace RedesSociales
 							const input = document.querySelector('.ZAOXnBPqM-Jpp-1EVcR39');
 							if (!input) return;
 							const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
-							setter.call(input, '" + noticia.SteamEs.Titulo + @"');
+							setter.call(input, '" + noticia.SteamEs.Titulo.Replace("'", null) + @"');
 							input.dispatchEvent(new Event('input', { bubbles: true }));
 							input.dispatchEvent(new Event('change', { bubbles: true }));
 						})();
@@ -184,7 +184,7 @@ namespace RedesSociales
 							const input = document.querySelector('._32XZf0gEFw0CwBBwiLjlEv');
 							if (!input) return;
 							const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
-							setter.call(input, '" + noticia.SteamEs.Subtitulo + @"');
+							setter.call(input, '" + noticia.SteamEs.Subtitulo.Replace("'", null) + @"');
 							input.dispatchEvent(new Event('input', { bubbles: true }));
 							input.dispatchEvent(new Event('change', { bubbles: true }));
 						})();

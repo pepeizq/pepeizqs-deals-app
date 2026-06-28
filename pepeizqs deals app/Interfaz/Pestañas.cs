@@ -63,6 +63,7 @@ namespace Interfaz
 			ObjetosVentana.gridAmazonLuna.Visibility = Visibility.Collapsed;
 			ObjetosVentana.gridRSS.Visibility = Visibility.Collapsed;
 			ObjetosVentana.gridSteam.Visibility = Visibility.Collapsed;
+            ObjetosVentana.gridDescripciones.Visibility = Visibility.Collapsed;
 			ObjetosVentana.gridOpciones.Visibility = Visibility.Collapsed;
 
 			grid.Visibility = Visibility.Visible;

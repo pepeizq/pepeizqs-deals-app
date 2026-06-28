@@ -29,7 +29,7 @@ namespace Modulos
 
 		private static void ArrancarClick(object sender, RoutedEventArgs e)
 		{
-			ObjetosVentana.botonAmazonLunaArrancar.Visibility = Visibility.Collapsed;
+			ObjetosVentana.botonAmazonLunaArrancar.IsEnabled = false;
 			ObjetosVentana.wvAmazonLuna.Source = new Uri("https://luna.amazon.es/subscription/luna-standard");
 		}
 
@@ -324,7 +324,7 @@ namespace Modulos
 						}
 					}
 
-					ObjetosVentana.botonAmazonLunaArrancar.Visibility = Visibility.Visible;
+					ObjetosVentana.botonAmazonLunaArrancar.IsEnabled = true;
 				}
 			}
 		}

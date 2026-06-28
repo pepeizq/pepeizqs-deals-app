@@ -220,6 +220,56 @@
                     </ScrollViewer>
                 </Grid>
 
+                <Grid x:Name="gridDescripciones" Visibility="Collapsed">
+                    <ScrollViewer x:Name="svDescripciones" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <interfaz:Button2 x:Name="botonDescripcionesArrancar" Grid.Column="0" Background="{StaticResource ColorPrimario}" Padding="18,12" RequestedTheme="Dark" BorderThickness="1" Margin="5">
+                                    <interfaz:Button2.BorderBrush>
+                                        <SolidColorBrush Color="{StaticResource ColorFuente}" Opacity="0.7"/>
+                                    </interfaz:Button2.BorderBrush>
+
+                                    <interfaz:Button2.Content>
+                                        <Grid>
+                                            <TextBlock Text="Arrancar Juegos" Foreground="{StaticResource ColorFuente}"/>
+                                        </Grid>
+                                    </interfaz:Button2.Content>
+                                </interfaz:Button2>
+
+                                <interfaz:Button2 x:Name="botonDescripcionesArrancar2" Grid.Column="1" Background="{StaticResource ColorPrimario}" Padding="18,12" RequestedTheme="Dark" BorderThickness="1" Margin="5">
+                                    <interfaz:Button2.BorderBrush>
+                                        <SolidColorBrush Color="{StaticResource ColorFuente}" Opacity="0.7"/>
+                                    </interfaz:Button2.BorderBrush>
+
+                                    <interfaz:Button2.Content>
+                                        <Grid>
+                                            <TextBlock Text="Arrancar Noticias" Foreground="{StaticResource ColorFuente}"/>
+                                        </Grid>
+                                    </interfaz:Button2.Content>
+                                </interfaz:Button2>
+
+                                <TextBlock x:Name="tbDescripcionesInfo" Grid.Column="2" Margin="5" Foreground="{StaticResource ColorFuente}" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <TextBlock x:Name="tbDescripciones2" Grid.Row="1" Margin="20" Foreground="{StaticResource ColorFuente}"/>
+
+                            <TextBlock x:Name="tbDescripciones" Grid.Row="2" Margin="20" Foreground="{StaticResource ColorFuente}"/>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+
                 <Grid x:Name="gridOpciones" Visibility="Collapsed">
                     <ScrollViewer x:Name="svOpciones" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <TextBlock Text="test2"/>

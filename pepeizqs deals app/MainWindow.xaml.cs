@@ -23,6 +23,7 @@ namespace pepeizqs_deals_app
 			Epic.Cargar();
 			Scraping.Cargar();
 			Steam.Cargar();
+			Descripciones.Cargar();
 
 			Pestañas.Visibilidad(gridHumble, true, null, false);
 		}
@@ -74,6 +75,16 @@ namespace pepeizqs_deals_app
 			ObjetosVentana.svSteam = svSteam;
 			ObjetosVentana.tbSteamEnlace = tbSteamEnlace;
 			ObjetosVentana.wvSteam = wvSteam;
+
+			//-----------------------------------------------------------------
+
+			ObjetosVentana.gridDescripciones = gridDescripciones;
+			ObjetosVentana.svDescripciones = svDescripciones;
+			ObjetosVentana.botonDescripcionesArrancar = botonDescripcionesArrancar;
+			ObjetosVentana.botonDescripcionesArrancar2 = botonDescripcionesArrancar2;
+			ObjetosVentana.tbDescripcionesInfo = tbDescripcionesInfo;
+			ObjetosVentana.tbDescripciones = tbDescripciones;
+			ObjetosVentana.tbDescripciones2 = tbDescripciones2;
 
 			//-----------------------------------------------------------------
 
@@ -131,12 +142,23 @@ namespace pepeizqs_deals_app
 
 			//-----------------------------------------------------------------
 
+			public static Grid gridDescripciones { get; set; }
+			public static ScrollViewer svDescripciones { get; set; }
+			public static Button botonDescripcionesArrancar { get; set; }
+			public static Button botonDescripcionesArrancar2 { get; set; }
+			public static TextBlock tbDescripcionesInfo { get; set; }
+			public static TextBlock tbDescripciones { get; set; }
+			public static TextBlock tbDescripciones2 { get; set; }
+
+			//-----------------------------------------------------------------
+
 			public static Grid gridOpciones { get; set; }
 			public static ScrollViewer svOpciones { get; set; }
 		}
 
 		private void nvPrincipal_Loaded(object sender, RoutedEventArgs e)
 		{
+			Pestañas.CreadorItems("Descripciones");
 			Pestañas.CreadorItems("Steam");
 			Pestañas.CreadorItems("RSS");
 			Pestañas.CreadorItems("Scraping");
@@ -195,6 +217,10 @@ namespace pepeizqs_deals_app
 							else if (tb.Text == "Steam")
 							{
 								Pestañas.Visibilidad(gridSteam, true, null, false);
+							}
+							else if (tb.Text == "Descripciones")
+							{
+								Pestañas.Visibilidad(gridDescripciones, true, null, false);
 							}
 						}
 					}

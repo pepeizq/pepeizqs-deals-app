@@ -29,6 +29,7 @@ namespace Modulos
 
 		private static void ArrancarClick(object sender, RoutedEventArgs e)
 		{
+			ObjetosVentana.botonHumbleArrancar.IsEnabled = false;
 			ObjetosVentana.wvHumbleAPI.Source = new Uri("https://www.humblebundle.com/store/api/search?filter=onsale&sort=discount&request=2&page_size=20&page=0");
 		}
 
@@ -144,6 +145,10 @@ namespace Modulos
 							wv.Source = new Uri("https://www.humblebundle.com/store/api/search?filter=onsale&sort=discount&request=2&page_size=20&page=" + pagina.ToString());
 						}
 					}
+				}
+				else
+				{
+					ObjetosVentana.botonHumbleArrancar.IsEnabled = true;
 				}
 			}
         }

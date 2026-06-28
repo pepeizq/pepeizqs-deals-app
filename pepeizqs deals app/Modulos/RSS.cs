@@ -115,97 +115,94 @@ namespace Modulos
 				}
 			}
 
-			if (noticias != null)
+			if (noticias?.Count > 0)
 			{
-				if (noticias.Count > 0)
+				ObjetosVentana.spRSSNoticias.Visibility = Visibility.Visible;
+				ObjetosVentana.spRSSNoticias.Children.Clear();
+
+				foreach (var noticia in noticias)
 				{
-					ObjetosVentana.spRSSNoticias.Visibility = Visibility.Visible;
-					ObjetosVentana.spRSSNoticias.Children.Clear();
-
-					foreach (var noticia in noticias)
+					Grid grid = new Grid
 					{
-						Grid grid = new Grid
-						{
-							Padding = new Thickness(20),
-							BorderThickness = new Thickness(0, 0, 0, 1)
-						};
+						Padding = new Thickness(20),
+						BorderThickness = new Thickness(0, 0, 0, 1)
+					};
 
-						ColumnDefinition col1 = new ColumnDefinition
-						{
-							Width = new GridLength(1, GridUnitType.Star)
-						};
+					ColumnDefinition col1 = new ColumnDefinition
+					{
+						Width = new GridLength(1, GridUnitType.Star)
+					};
 
-						grid.ColumnDefinitions.Add(col1);
+					grid.ColumnDefinitions.Add(col1);
 
-						ColumnDefinition col2 = new ColumnDefinition
-						{
-							Width = new GridLength(1, GridUnitType.Auto)
-						};
+					ColumnDefinition col2 = new ColumnDefinition
+					{
+						Width = new GridLength(1, GridUnitType.Auto)
+					};
 
-						grid.ColumnDefinitions.Add(col2);
+					grid.ColumnDefinitions.Add(col2);
 
-						TextBlock tb = new TextBlock();
-						tb.Text = noticia.TituloEn;
+					TextBlock tb = new TextBlock();
+					tb.Text = noticia.TituloEn;
 
-						tb.SetValue(Grid.ColumnProperty, 0);
-						grid.Children.Add(tb);
+					tb.SetValue(Grid.ColumnProperty, 0);
+					grid.Children.Add(tb);
 
-						//--------------------------------------------
+					//--------------------------------------------
 
-						StackPanel sp = new StackPanel
-						{
-							Orientation = Orientation.Horizontal
-						};
+					StackPanel sp = new StackPanel
+					{
+						Orientation = Orientation.Horizontal
+					};
 
-						#region Todo
-						TextBlock tbTodo = new TextBlock
-						{
-							Text = "Todo",
-							Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
-						};
+					#region Todo
+					TextBlock tbTodo = new TextBlock
+					{
+						Text = "Todo",
+						Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
+					};
 
-						Button2 botonTodo = new Button2
-						{
-							Tag = noticia,
-							Content = tbTodo,
-							Margin = new Thickness(20, 0, 0, 0),
-							Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
-						};
+					Button2 botonTodo = new Button2
+					{
+						Tag = noticia,
+						Content = tbTodo,
+						Margin = new Thickness(20, 0, 0, 0),
+						Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
+					};
 
-						botonTodo.Click += ClickTodo;
-						botonTodo.PointerEntered += Animaciones.EntraRatonBoton2;
-						botonTodo.PointerExited += Animaciones.SaleRatonBoton2;
+					botonTodo.Click += ClickTodo;
+					botonTodo.PointerEntered += Animaciones.EntraRatonBoton2;
+					botonTodo.PointerExited += Animaciones.SaleRatonBoton2;
 
-						sp.Children.Add(botonTodo);
-						#endregion
+					sp.Children.Add(botonTodo);
+					#endregion
 
-						#region Steam
-						FontAwesome iconoSteam = new FontAwesome
-						{
-							Icon = FontAwesome6.EFontAwesomeIcon.Brands_Steam,
-							Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
-						};
+					#region Steam
+					FontAwesome iconoSteam = new FontAwesome
+					{
+						Icon = FontAwesome6.EFontAwesomeIcon.Brands_Steam,
+						Foreground = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorFuente"])
+					};
 
-						Button2 botonSteam = new Button2
-						{
-							Tag = noticia,
-							Content = iconoSteam,
-							Margin = new Thickness(20, 0, 0, 0),
-							Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
-						};
+					Button2 botonSteam = new Button2
+					{
+						Tag = noticia,
+						Content = iconoSteam,
+						Margin = new Thickness(20, 0, 0, 0),
+						Background = new SolidColorBrush((Windows.UI.Color)Application.Current.Resources["ColorPrimario"])
+					};
 
-						botonSteam.Click += ClickSteam;
-						botonSteam.PointerEntered += Animaciones.EntraRatonBoton2;
-						botonSteam.PointerExited += Animaciones.SaleRatonBoton2;
+					botonSteam.Click += ClickSteam;
+					botonSteam.PointerEntered += Animaciones.EntraRatonBoton2;
+					botonSteam.PointerExited += Animaciones.SaleRatonBoton2;
 
-						sp.Children.Add(botonSteam);
-						#endregion
+					sp.Children.Add(botonSteam);
+					#endregion
 
-						sp.SetValue(Grid.ColumnProperty, 1);
-						grid.Children.Add(sp);
+					sp.SetValue(Grid.ColumnProperty, 1);
+					grid.Children.Add(sp);
 
-						ObjetosVentana.spRSSNoticias.Children.Add(grid);
-					}
+					ObjetosVentana.spRSSNoticias.Children.Add(grid);
 				}
 			}
 		}
