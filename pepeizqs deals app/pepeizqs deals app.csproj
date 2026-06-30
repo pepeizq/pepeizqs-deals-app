@@ -13,6 +13,9 @@
 	<WindowsPackageType>None</WindowsPackageType>
 <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Modulos\Descripciones.cs~RF2ddbbc1.TMP" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />

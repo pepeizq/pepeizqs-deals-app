@@ -25,7 +25,9 @@ namespace Modulos
 			ObjetosVentana.botonDescripcionesArrancar2.PointerEntered += Animaciones.EntraRatonBoton2;
 			ObjetosVentana.botonDescripcionesArrancar2.PointerExited += Animaciones.SaleRatonBoton2;
 
-			string textoInfo = string.Empty;
+			ObjetosVentana.botonDescripcionesArrancar3.Click += async (s, e) => await ArrancarCuratorsClick(s, e);
+			ObjetosVentana.botonDescripcionesArrancar3.PointerEntered += Animaciones.EntraRatonBoton2;
+			ObjetosVentana.botonDescripcionesArrancar3.PointerExited += Animaciones.SaleRatonBoton2;
 
 			using (SqlConnection conexion = new SqlConnection(DatosPersonales.Servidor))
 			{
@@ -35,7 +37,9 @@ namespace Modulos
 				{
 					string sqlBuscar = @"SELECT 'juegos' AS tabla, CAST(COUNT(CASE WHEN descripcionSEO IS NOT NULL THEN 1 END) * 100.0 / COUNT(*) AS DECIMAL(5,2)) AS porcentaje FROM juegos
 										UNION ALL
-										SELECT 'noticias', CAST(COUNT(CASE WHEN descripcionSEO IS NOT NULL THEN 1 END) * 100.0 / COUNT(*) AS DECIMAL(5,2)) FROM noticias";
+										SELECT 'noticias', CAST(COUNT(CASE WHEN descripcionSEO IS NOT NULL THEN 1 END) * 100.0 / COUNT(*) AS DECIMAL(5,2)) FROM noticias
+										UNION ALL
+										SELECT 'curators', CAST(COUNT(CASE WHEN descripcionSEO IS NOT NULL THEN 1 END) * 100.0 / COUNT(*) AS DECIMAL(5,2)) FROM curators";
 
 					using (SqlCommand comandoBuscar = new SqlCommand(sqlBuscar, conexion))
 					{
@@ -46,19 +50,23 @@ namespace Modulos
 								string tabla = lector.GetString(0);
 								decimal porcentaje = lector.GetDecimal(1);
 
-								if (string.IsNullOrEmpty(textoInfo) == false)
+								if (tabla == "juegos")
 								{
-									textoInfo = textoInfo + " - ";
+									ObjetosVentana.botonDescripcionesArrancarTexto.Text = "Arrancar Juegos - " + porcentaje.ToString() + "%";
 								}
-
-								textoInfo = textoInfo + tabla + " " + porcentaje.ToString() + "%";
+								else if (tabla == "noticias")
+								{
+									ObjetosVentana.botonDescripcionesArrancar2Texto.Text = "Arrancar Noticias - " + porcentaje.ToString() + "%";
+								}
+								else if (tabla == "curators")
+								{
+									ObjetosVentana.botonDescripcionesArrancar3Texto.Text = "Arrancar Curators - " + porcentaje.ToString() + "%";
+								}
 							}
 						}
 					}
 				}
 			}
-
-			ObjetosVentana.tbDescripcionesInfo.Text = textoInfo;
 		}
 
 		private static async Task ArrancarJuegosClick(object sender, RoutedEventArgs e)
@@ -66,58 +74,65 @@ namespace Modulos
 			PowerManager.MantenerActivo();
 			ObjetosVentana.botonDescripcionesArrancar.IsEnabled = false;
 			ObjetosVentana.botonDescripcionesArrancar2.IsEnabled = false;
+			ObjetosVentana.botonDescripcionesArrancar3.IsEnabled = false;
 
 			int cantidadAñadidos = 0;
+			bool hayPendientes = true;
 
-			using (SqlConnection conexion = new SqlConnection(DatosPersonales.Servidor))
+			while (hayPendientes == true)
 			{
-				conexion.Open();
+				hayPendientes = false;
 
-				if (conexion.State == System.Data.ConnectionState.Open)
+				using (SqlConnection conexion = new SqlConnection(DatosPersonales.Servidor))
 				{
-					string sqlBuscar = @"SELECT id, tipo, nombre, JSON_VALUE(caracteristicas, '$.Descripcion'), categorias, etiquetas FROM juegos WHERE nombre IS NOT NULL AND nombre != ''
+					conexion.Open();
+
+					if (conexion.State == System.Data.ConnectionState.Open)
+					{
+						string sqlBuscar = @"SELECT id, tipo, nombre, JSON_VALUE(caracteristicas, '$.Descripcion'), categorias, etiquetas FROM juegos WHERE nombre IS NOT NULL AND nombre != ''
 						AND caracteristicas IS NOT NULL AND JSON_VALUE(caracteristicas, '$.Descripcion') IS NOT NULL AND JSON_VALUE(caracteristicas, '$.Descripcion') != ''
 						AND categorias IS NOT NULL AND categorias != ''
 						AND etiquetas IS NOT NULL AND etiquetas != ''
 						AND descripcionSEO IS NULL";
 
-					using (SqlCommand comandoBuscar = new SqlCommand(sqlBuscar, conexion))
-					{
-						using (SqlDataReader lector = comandoBuscar.ExecuteReader())
+						using (SqlCommand comandoBuscar = new SqlCommand(sqlBuscar, conexion))
 						{
-							while (lector.Read())
+							using (SqlDataReader lector = comandoBuscar.ExecuteReader())
 							{
-								ObjetosVentana.tbDescripciones2.Text = "Cantidad Añadidos: " + cantidadAñadidos.ToString();
-
-								JuegoSEO juego = new JuegoSEO();
-
-								juego.Id = lector.GetInt32(0);
-								juego.Tipo = lector.GetString(1);
-								juego.Nombre = lector.GetString(2);
-								juego.Descripcion = lector.GetString(3);								
-								juego.Categorias = JsonSerializer.Deserialize<List<string>>(lector.GetString(4));
-								juego.Etiquetas = JsonSerializer.Deserialize<List<string>>(lector.GetString(5));
-
-								string tipoFinal = string.Empty;
-
-								if (juego.Tipo == "0")
+								while (lector.Read())
 								{
-									tipoFinal = "Game";
-								}
-								else if (juego.Tipo == "1")
-								{
-									tipoFinal = "DLC";
-								}
-								else if (juego.Tipo == "3")
-								{
-									tipoFinal = "Soundtrack";
-								}
-								else if (juego.Tipo == "4")
-								{
-									tipoFinal = "Software";
-								}
+									hayPendientes = true;
+									ObjetosVentana.tbDescripciones2.Text = "Cantidad Añadidos: " + cantidadAñadidos.ToString();
 
-								string prompt = $"""
+									JuegoSEO juego = new JuegoSEO();
+
+									juego.Id = lector.GetInt32(0);
+									juego.Tipo = lector.GetString(1);
+									juego.Nombre = lector.GetString(2);
+									juego.Descripcion = lector.GetString(3);
+									juego.Categorias = JsonSerializer.Deserialize<List<string>>(lector.GetString(4));
+									juego.Etiquetas = JsonSerializer.Deserialize<List<string>>(lector.GetString(5));
+
+									string tipoFinal = string.Empty;
+
+									if (juego.Tipo == "0")
+									{
+										tipoFinal = "Game";
+									}
+									else if (juego.Tipo == "1")
+									{
+										tipoFinal = "DLC";
+									}
+									else if (juego.Tipo == "3")
+									{
+										tipoFinal = "Soundtrack";
+									}
+									else if (juego.Tipo == "4")
+									{
+										tipoFinal = "Software";
+									}
+
+									string prompt = $"""
 									Write a SEO description for a deals {tipoFinal} page, and it is MANDATORY that it be between 150 and 160 characters.
 
 									Name: {juego.Nombre}
@@ -127,38 +142,39 @@ namespace Modulos
 									Tags: {SteamEtiquetas.Resolver(juego.Etiquetas?.Take(6))}
 									""";
 
-								var ollama = new OllamaApiClient(new Uri("http://localhost:11434/"), "llama3.2:latest");
+									var ollama = new OllamaApiClient(new Uri("http://localhost:11434/"), "llama3.2:latest");
 
-								var chat = new Chat(ollama, "You are a SEO description writer. You ONLY output the description text, which must be strictly between 150 and 160 characters. No character counts, no explanations, no quotes, no double quotes, no labels. Just the raw text.");
-								string texto = string.Empty;
-								
-								await foreach (var mensaje in chat.SendAsync(prompt))
-								{
-									texto = texto + mensaje;
-								}
+									var chat = new Chat(ollama, "You are a SEO description writer. You ONLY output the description text, which must be strictly between 150 and 160 characters. No character counts, no explanations, no quotes, no double quotes, no labels. Just the raw text.");
+									string texto = string.Empty;
 
-								texto = texto.Replace(Strings.ChrW(34).ToString(), null);
-
-								if (texto.Length > 160)
-								{
-									int ultimoEspacio = texto.LastIndexOf(' ', 156);
-									texto = ultimoEspacio != -1 ? texto[..ultimoEspacio] + " ..." : texto[..156] + " ...";
-								}
-
-								ObjetosVentana.tbDescripciones.Text = juego.Nombre + "\n\n" + texto.Length.ToString() + "\n" + texto;
-
-								if (texto.Length >= 150 && texto.Length <= 160)
-								{
-									using (SqlConnection conexionUpdate = new SqlConnection(DatosPersonales.Servidor))
+									await foreach (var mensaje in chat.SendAsync(prompt))
 									{
-										conexionUpdate.Open();
-										using (SqlCommand cmd = new SqlCommand("UPDATE juegos SET descripcionSEO = @desc WHERE id = @id", conexionUpdate))
-										{
-											cmd.Parameters.AddWithValue("@desc", texto);
-											cmd.Parameters.AddWithValue("@id", juego.Id);
-											cmd.ExecuteNonQuery();
+										texto = texto + mensaje;
+									}
 
-											cantidadAñadidos += 1;
+									texto = texto.Replace(Strings.ChrW(34).ToString(), null);
+
+									if (texto.Length > 160)
+									{
+										int ultimoEspacio = texto.LastIndexOf(' ', 156);
+										texto = ultimoEspacio != -1 ? texto[..ultimoEspacio] + " ..." : texto[..156] + " ...";
+									}
+
+									ObjetosVentana.tbDescripciones.Text = juego.Id.ToString() + " - " + juego.Nombre + "\n\n" + texto.Length.ToString() + "\n" + texto;
+
+									if (texto.Length >= 150 && texto.Length <= 160)
+									{
+										using (SqlConnection conexionUpdate = new SqlConnection(DatosPersonales.Servidor))
+										{
+											conexionUpdate.Open();
+											using (SqlCommand cmd = new SqlCommand("UPDATE juegos SET descripcionSEO = @desc WHERE id = @id", conexionUpdate))
+											{
+												cmd.Parameters.AddWithValue("@desc", texto);
+												cmd.Parameters.AddWithValue("@id", juego.Id);
+												cmd.ExecuteNonQuery();
+
+												cantidadAñadidos += 1;
+											}
 										}
 									}
 								}
@@ -170,6 +186,7 @@ namespace Modulos
 
 			ObjetosVentana.botonDescripcionesArrancar.IsEnabled = true;
 			ObjetosVentana.botonDescripcionesArrancar2.IsEnabled = true;
+			ObjetosVentana.botonDescripcionesArrancar3.IsEnabled = true;
 			PowerManager.Liberar();
 		}
 
@@ -178,6 +195,7 @@ namespace Modulos
 			PowerManager.MantenerActivo();
 			ObjetosVentana.botonDescripcionesArrancar.IsEnabled = false;
 			ObjetosVentana.botonDescripcionesArrancar2.IsEnabled = false;
+			ObjetosVentana.botonDescripcionesArrancar3.IsEnabled = false;
 
 			int cantidadAñadidos = 0;
 			bool hayPendientes = true;
@@ -237,7 +255,7 @@ namespace Modulos
 										texto = ultimoEspacio != -1 ? texto[..ultimoEspacio] + " ..." : texto[..156] + " ...";
 									}
 
-									ObjetosVentana.tbDescripciones.Text = noticia.TituloEn + "\n\n" + texto.Length.ToString() + "\n" + texto;
+									ObjetosVentana.tbDescripciones.Text = noticia.Id.ToString() + " - " + noticia.TituloEn + "\n\n" + texto.Length.ToString() + "\n" + texto;
 
 									if (texto.Length >= 150 && texto.Length <= 160)
 									{
@@ -263,6 +281,109 @@ namespace Modulos
 
 			ObjetosVentana.botonDescripcionesArrancar.IsEnabled = true;
 			ObjetosVentana.botonDescripcionesArrancar2.IsEnabled = true;
+			ObjetosVentana.botonDescripcionesArrancar3.IsEnabled = true;
+			PowerManager.Liberar();
+		}
+
+		private static async Task ArrancarCuratorsClick(object sender, RoutedEventArgs e)
+		{
+			PowerManager.MantenerActivo();
+			ObjetosVentana.botonDescripcionesArrancar.IsEnabled = false;
+			ObjetosVentana.botonDescripcionesArrancar2.IsEnabled = false;
+			ObjetosVentana.botonDescripcionesArrancar3.IsEnabled = false;
+
+			int cantidadAñadidos = 0;
+			bool hayPendientes = true;
+
+			while (hayPendientes == true)
+			{
+				hayPendientes = false;
+
+				using (SqlConnection conexion = new SqlConnection(DatosPersonales.Servidor))
+				{
+					conexion.Open();
+
+					if (conexion.State == System.Data.ConnectionState.Open)
+					{
+						string sqlBuscar = @"SELECT id, nombre, descripcion FROM curators WHERE 
+						nombre IS NOT NULL
+						AND descripcionSEO IS NULL";
+
+						using (SqlCommand comandoBuscar = new SqlCommand(sqlBuscar, conexion))
+						{
+							using (SqlDataReader lector = comandoBuscar.ExecuteReader())
+							{
+								while (lector.Read())
+								{
+									hayPendientes = true;
+									ObjetosVentana.tbDescripciones2.Text = "Cantidad Añadidos: " + cantidadAñadidos.ToString();
+
+									CuratorSEO curator = new CuratorSEO();
+
+									curator.Id = lector.GetInt32(0);
+									curator.Nombre = lector.GetString(1);
+
+									if (lector.IsDBNull(2) == false)
+									{
+										curator.Descripcion = lector.GetString(2);
+									}
+
+									string prompt = $"""
+									Write a SEO description for a curator page, and it is MANDATORY that it be between 150 and 160 characters.
+
+									Name: {curator.Nombre}
+									""";
+
+									if (string.IsNullOrEmpty(curator.Descripcion) == false) 
+									{ 
+										prompt = prompt + $"Old Description: {curator.Descripcion}";
+									}
+
+									var ollama = new OllamaApiClient(new Uri("http://localhost:11434/"), "llama3.2:latest");
+
+									var chat = new Chat(ollama, "You are a SEO description writer. You ONLY output the description text, which must be strictly between 150 and 160 characters. No character counts, no explanations, no quotes, no double quotes, no labels. Just the raw text.");
+									string texto = string.Empty;
+
+									await foreach (var mensaje in chat.SendAsync(prompt))
+									{
+										texto = texto + mensaje;
+									}
+
+									texto = texto.Replace(Strings.ChrW(34).ToString(), null);
+
+									if (texto.Length > 160)
+									{
+										int ultimoEspacio = texto.LastIndexOf(' ', 156);
+										texto = ultimoEspacio != -1 ? texto[..ultimoEspacio] + " ..." : texto[..156] + " ...";
+									}
+
+									ObjetosVentana.tbDescripciones.Text = curator.Id.ToString() + " - " + curator.Nombre + "\n\n" + texto.Length.ToString() + "\n" + texto;
+
+									if (texto.Length >= 150 && texto.Length <= 160)
+									{
+										using (SqlConnection conexionUpdate = new SqlConnection(DatosPersonales.Servidor))
+										{
+											conexionUpdate.Open();
+											using (SqlCommand cmd = new SqlCommand("UPDATE curators SET descripcionSEO = @desc WHERE id = @id", conexionUpdate))
+											{
+												cmd.Parameters.AddWithValue("@desc", texto);
+												cmd.Parameters.AddWithValue("@id", curator.Id);
+												cmd.ExecuteNonQuery();
+
+												cantidadAñadidos += 1;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			ObjetosVentana.botonDescripcionesArrancar.IsEnabled = true;
+			ObjetosVentana.botonDescripcionesArrancar2.IsEnabled = true;
+			ObjetosVentana.botonDescripcionesArrancar3.IsEnabled = true;
 			PowerManager.Liberar();
 		}
 	}
@@ -282,6 +403,13 @@ namespace Modulos
 		public int Id { get; set; }
 		public string TituloEn { get; set; }
 		public string ContenidoEn { get; set; }
+	}
+
+	public class CuratorSEO
+	{
+		public int Id { get; set; }
+		public string Nombre { get; set; }
+		public string Descripcion { get; set; }
 	}
 
 	public static class SteamCategorias
